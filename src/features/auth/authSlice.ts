@@ -1,55 +1,104 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-// import axios from "axios";
+import axios from "axios";
+import config from '../../config/config'
 
-interface LoginPayload {
-    id_number: string;
-    password: string;
-}
+const baseURL = `${config.defaults.baseURL}/api/auth`;
 
-export const loginUser = createAsyncThunk('auth/login', async(data: LoginPayload, thunkAPI) => {
+const storedToken = localStorage.getItem("token");
+const storedUser = localStorage.getItem("user");
+
+// Interface
+    interface LoginPayload {
+        id_number: string;
+        password: string;
+    }
+
+    interface LoginResponse {
+        token: string | null;
+        user: any | null;
+    }
+
+    interface AuthState {
+        user: any | null;
+        token: string | null;
+        loading: boolean;
+        errors: [{ path: string, msg: string }] | null;
+    }
+// Interface
+
+
+
+// Initial State
+    const initialState: AuthState = {
+        user: storedUser || null,
+        token: storedToken || null,
+        loading: false,
+        errors: null
+    };
+
+export const loginUser = createAsyncThunk<LoginResponse, LoginPayload, { rejectValue: [{ path: string, msg: string }] }>('auth/login', async(payload, thunkAPI) => {
     try {
-        return { token: 'kln3456bj2346jk3467jkn;hbk;2346bj', user: 'John Arian Malondras' };
-    } catch (error) {
+        const response = await axios.post(`${baseURL}/login`, payload);
+        let res : LoginResponse = {
+            token: null,
+            user: null
+        }
+        if(response.data.status === 200){
+            const allowed_app = response.data.user.allowed_app.split(';');
+            if(allowed_app.includes('master-console')){
+                res = {
+                    token: response.data.token,
+                    user: response.data.user
+                }
+            } 
+        }
+        console.log(res);
+        return res;
+    } catch (err: any) {
+        console.log(err);
         
+        if(err.response?.status === 401 || err.response?.status === 400){
+            return thunkAPI.rejectWithValue(err.response.data.errors);
+        }else{
+            return thunkAPI.rejectWithValue([{ path: "unknown", msg: "Server Error"}]);
+        }
     }
 })
-
-interface AuthState {
-    user: any | null;
-    token: string | null;
-    loading: boolean;
-    error: string | null;
-}
-
-const initialState: AuthState = {
-    user: null,
-    token: null,
-    loading: false,
-    error: null
-};
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         logout(state){
-
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "/login";
         }
     },
     extraReducers(builder) {builder
         .addCase(loginUser.pending, (state) => {
             state.loading = true;
-            state.error = null;
+            state.errors = null;
         })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
             console.log(action.payload);
-            // state.user = action.payload.user;
-            // state.token = action.payload.token;
+
+            // redux store
+            state.user = action.payload.user;
+            state.token = action.payload.token;
+
+            // local store
+            localStorage.setItem("user", JSON.stringify(action.payload.user));
+            localStorage.setItem("token", JSON.stringify(action.payload.token));
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = null;
+            if(action.payload){
+                state.errors = action.payload;
+            }else{
+                state.errors = [{ path: "unknown", msg: "Unexpected error" }];
+            }
         })
     },
 })
