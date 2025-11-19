@@ -37,11 +37,11 @@ const LoginPage = () => {
 
     return (
         <>
-            <div className='w-screen h-screen bg-linear-to-bl from-violet-600 to-slate-800 flex items-center justify-center'>
+            <div className='w-screen h-screen bg-linear-to-bl to-[#212121] from-[#363636] flex items-center justify-center'>
                 <div className='bg-white px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
                     <div>
                         <img src="/public/logo.ico" className='mx-auto w-16' alt="logo" />
-                        <h1 className='text-center font-bold text-gray-600 text-3xl'>Sign-In</h1>
+                        <h1 className='text-center font-bold text-[#363636] text-3xl'>Sign-In</h1>
                     </div>
                     {
                         errors?.find((err) => err.path === 'all') ? (
@@ -51,14 +51,14 @@ const LoginPage = () => {
                         ) : null
                     }
                     <div className='mt-6'>
-                        <p className='text-xs text-gray-500'>ID Number</p>
-                        <div className={`text-gray-600 flex items-center gap-x-1 w-full border-b ${errors?.find((err) => err.path === 'id_number') ? 'border-red-500' : 'border-gray-400' } `}>
+                        <p className='text-xs text-[#505050]'>ID Number</p>
+                        <div className={`text-[#505050] flex items-center gap-x-1 w-full border-b ${errors?.find((err) => err.path === 'id_number') ? 'border-red-500' : 'border-gray-400' } `}>
                             <p className='font-bold whitespace-nowrap pl-1'>HII -</p>
                             <input name='id_number' value={data.id_number} onChange={(e) => handleChangeData(e)} type="text" className='flex-1 focus:outline-none'/>
                         </div>
-                        <p className='text-xs text-gray-500 mt-6'>Password</p>
-                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } border-b  px-1 w-full focus:outline-none`}/>
-                        <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-violet-500 hover:bg-violet-600 relative'>
+                        <p className='text-xs text-[#505050] mt-6'>Password</p>
+                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#505050] border-b  px-1 w-full focus:outline-none`}/>
+                        <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-[#363636] hover:bg-[#212121] relative'>
                             SIGN-IN
                             { loading && 
                                 <div className='w-full h-full absolute top-0 left-0 flex items-center justify-start pl-2'>
