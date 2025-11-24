@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios";
 import config from '../../config/config'
 
-const baseURL = `${config.defaults.baseURL}/api/auth`;
-
 const storedToken = localStorage.getItem("token");
 const storedUser = localStorage.getItem("user");
 
@@ -38,7 +36,7 @@ const storedUser = localStorage.getItem("user");
 
 export const loginUser = createAsyncThunk<LoginResponse, LoginPayload, { rejectValue: [{ path: string, msg: string }] }>('auth/login', async(payload, thunkAPI) => {
     try {
-        const response = await axios.post(`${baseURL}/login`, payload);
+        const response = await config.post('/auth/login', payload);
         let res : LoginResponse = {
             token: null,
             user: null
@@ -52,11 +50,8 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload, { rejectV
                 }
             } 
         }
-        console.log(res);
         return res;
     } catch (err: any) {
-        console.log(err);
-        
         if(err.response?.status === 401 || err.response?.status === 400){
             return thunkAPI.rejectWithValue(err.response.data.errors);
         }else{
@@ -82,15 +77,16 @@ const authSlice = createSlice({
         })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
-            console.log(action.payload);
 
             // redux store
             state.user = action.payload.user;
             state.token = action.payload.token;
 
+            console.log(action.payload.token);
+
             // local store
             localStorage.setItem("user", JSON.stringify(action.payload.user));
-            localStorage.setItem("token", JSON.stringify(action.payload.token));
+            localStorage.setItem("token", action.payload.token ?? "");
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
