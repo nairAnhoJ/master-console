@@ -37,27 +37,27 @@ const LoginPage = () => {
 
     return (
         <>
-            <div className='w-screen h-screen bg-linear-to-bl to-[#212121] from-[#363636] flex items-center justify-center'>
-                <div className='bg-white px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
+            <div className='w-screen h-screen bg-linear-to-bl to-[#212121] from-[#464646] flex items-center justify-center'>
+                <div className=' bg-linear-to-bl to-[#181818] from-[#303030] px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
                     <div>
                         <img src="/public/logo.ico" className='mx-auto w-16' alt="logo" />
-                        <h1 className='text-center font-bold text-[#363636] text-3xl'>Sign-In</h1>
+                        <h1 className='text-center font-bold text-[#eeeeee] text-3xl'>Sign-In</h1>
                     </div>
                     {
                         errors?.find((err) => err.path === 'all') ? (
-                            <div className='bg-red-200/50 rounded border-2 border-red-500/70 w-full h-10 flex items-center justify-center text-xs text-red-600 mt-5'>
+                            <div className='bg-red-200 rounded border-2 border-red-400 w-full h-10 flex items-center justify-center text-xs text-red-700 mt-5'>
                                 { errors?.find((err) => err.path === 'all')?.msg }
                             </div>
                         ) : null
                     }
                     <div className='mt-6'>
-                        <p className='text-xs text-[#505050]'>ID Number</p>
-                        <div className={`text-[#505050] flex items-center gap-x-1 w-full border-b ${errors?.find((err) => err.path === 'id_number') ? 'border-red-500' : 'border-gray-400' } `}>
+                        <p className='text-xs text-[#eeeeee]'>ID Number</p>
+                        <div className={`text-[#eeeeee] flex items-center gap-x-1 w-full border-b ${errors?.find((err) => err.path === 'id_number') ? 'border-red-500' : 'border-gray-400' } `}>
                             <p className='font-bold whitespace-nowrap pl-1'>HII -</p>
                             <input name='id_number' value={data.id_number} onChange={(e) => handleChangeData(e)} type="text" className='flex-1 focus:outline-none'/>
                         </div>
-                        <p className='text-xs text-[#505050] mt-6'>Password</p>
-                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#505050] border-b  px-1 w-full focus:outline-none`}/>
+                        <p className='text-xs text-[#eeeeee] mt-6'>Password</p>
+                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#eeeeee] border-b  px-1 w-full focus:outline-none`}/>
                         <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-[#363636] hover:bg-[#212121] relative'>
                             SIGN-IN
                             { loading && 

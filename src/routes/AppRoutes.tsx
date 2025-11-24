@@ -1,5 +1,4 @@
-import React from 'react';
-import {  Route, Routes, Navigate } from 'react-router-dom';
+import {  Route, Routes } from 'react-router-dom';
 import LoginPage from '../features/auth/LoginPage'
 import UsersIndex from '../features/users/UsersIndex';
 import ProtectedRoute from './ProtectedRoute';
