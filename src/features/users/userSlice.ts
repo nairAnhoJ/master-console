@@ -24,8 +24,12 @@ const initialState: userState = {
 
 
 export const fetchUser = createAsyncThunk('users/fetch', async () => {
-    const response = await config.get('/users');
-    return response.data;
+    try {
+        const response = await config.get('/users');
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+    }
 })
 
 
@@ -35,8 +39,12 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(fetchUser.pending, (state, action) => {
+                state.loading = true;
+            })
             .addCase(fetchUser.fulfilled, (state, action) => {
                 state.users = action.payload;
+                state.loading = false;
             })
     }
 })

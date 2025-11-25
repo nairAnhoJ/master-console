@@ -37,8 +37,8 @@ const LoginPage = () => {
 
     return (
         <>
-            <div className='w-screen h-screen bg-linear-to-bl to-[#212121] from-[#464646] flex items-center justify-center'>
-                <div className=' bg-linear-to-bl to-[#181818] from-[#303030] px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
+            <div className='w-screen h-screen bg-[#181818] flex items-center justify-center'>
+                <div className=' bg-[#212121] px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
                     <div>
                         <img src="/public/logo.ico" className='mx-auto w-16' alt="logo" />
                         <h1 className='text-center font-bold text-[#eeeeee] text-3xl'>Sign-In</h1>

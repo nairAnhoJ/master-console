@@ -15,4 +15,17 @@ config.interceptors.request.use((cnfg) => {
     return cnfg;
 })
 
+config.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const status = error.response?.status;
+        const message = error.response?.data.message;
+
+        if(status === 401 && message === 'Unauthorized'){
+            localStorage.removeItem('token');
+            window.location.href = '/login'
+        }
+    }
+)
+
 export default config;
