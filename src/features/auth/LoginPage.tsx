@@ -58,7 +58,7 @@ const LoginPage = () => {
                         </div>
                         <p className='text-xs text-[#eeeeee] mt-6'>Password</p>
                         <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#eeeeee] border-b  px-1 w-full focus:outline-none`}/>
-                        <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-[#363636] hover:bg-[#212121] relative'>
+                        <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-[#363636] hover:bg-[#313131] relative'>
                             SIGN-IN
                             { loading && 
                                 <div className='w-full h-full absolute top-0 left-0 flex items-center justify-start pl-2'>
