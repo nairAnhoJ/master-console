@@ -20,14 +20,23 @@ interface User {
     signature: File | null;
 }
 
+interface Errors {
+    path: string;
+    msg: string;
+}
+
 interface userState {
     users: UserList[],
-    loading: boolean
+    loading: boolean,
+    success: string,
+    errors: Errors[]
 }
 
 const initialState: userState = {
     users: [],
-    loading: false
+    loading: false,
+    success: '',
+    errors: []
 }
 
 
@@ -41,23 +50,26 @@ export const fetchUser = createAsyncThunk('users/fetch', async () => {
 })
 
 
-export const createUser = createAsyncThunk('users/create', async (user: User) => {
+export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>('users/create', async (user, {rejectWithValue}) => {
     try {
-        console.log(user);
         const data = new FormData();
         data.append('id_number', user.id_number);
         data.append('name', user.name);
-        data.append('department_id', user.department_id);
-        data.append('site_id', user.site_id);
+        data.append('department_id', String(user.department_id));
+        data.append('site_id', String(user.site_id));
         data.append('email', user.email);
         data.append('phone', user.phone);
-        data.append('allowed_app', user.allowed_app);
-        data.append('signature', user.signature)
+        data.append('allowed_app', user.allowed_app.join(';'));
+        if(user.signature){
+            data.append('signature', user.signature)
+        }
 
-        const response = await config.post('/users/create', data);
+        const response = await config.post('/users/create', data, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
         return response;
     } catch (error: any) {
-        console.log(error);
+        return rejectWithValue(error.response.data.errors);
     }
 })
 
@@ -75,13 +87,17 @@ const userSlice = createSlice({
                 state.users = action.payload;
                 state.loading = false;
             })
+
             .addCase(createUser.pending, (state, action) => {
                 state.loading = true;
             })
             .addCase(createUser.fulfilled, (state, action) => {
                 console.log(action.payload);
-                // state.users = action.payload;
                 state.loading = false;
+            })
+            .addCase(createUser.rejected, (state, action) => {
+                console.log(action.payload);
+                state.errors = action.payload ? action.payload : [];
             })
     }
 })

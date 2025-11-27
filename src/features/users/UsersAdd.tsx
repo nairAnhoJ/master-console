@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { createUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
+import { fetchArea } from "../areas/areaSlice";
 
 interface User {
     id_number: string;
@@ -13,7 +14,7 @@ interface User {
     email: string;
     phone: string;
     allowed_app: string[];
-    signature: File | null
+    signature: File | null;
 }
 
 const UsersAdd = () => {
@@ -22,8 +23,8 @@ const UsersAdd = () => {
     const [user, setUser] = useState<User>({
         id_number: '',
         name: '',
-        department_id: null,
-        site_id: null,
+        department_id: 5,
+        site_id: 1,
         email: '',
         phone: '',
         allowed_app: [],
@@ -31,12 +32,16 @@ const UsersAdd = () => {
     })
     const { departments } = useAppSelector((state) => state.departments)
     const { sites } = useAppSelector((state) => state.sites)
+    const { areas } = useAppSelector((state) => state.areas)
+    const { errors } = useAppSelector((state) => state.users)
+    const [fileError, setFileError] = useState<string>('')
     const [signPrev,setSignPrev] = useState<string | null>(null);
     const allowedAppsOptions = ['mrf', 'master-console'];
 
     useEffect(() => {
         dispatch(fetchDepartment());
         dispatch(fetchSites());
+        dispatch(fetchArea())
     }, [])
 
     const handleAllowedAppsClick = (app: string) => {
@@ -47,16 +52,22 @@ const UsersAdd = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
+        setFileError('');
+        console.log(files?.[0].type);
         if(files && files.length > 0){
-            setUser((prev) => ({...prev, signature: files[0]}));
-            setSignPrev(files[0].type.startsWith("image/") ? URL.createObjectURL(files[0]) : null);
+            if(files?.[0].type === 'image/png'){
+                setUser((prev) => ({...prev, signature: files[0]}));
+                setSignPrev(files[0].type.startsWith("image/") ? URL.createObjectURL(files[0]) : null);
+            }else{
+                setFileError('type');
+            }
         }else{
             setUser((prev) => ({...prev, [e.target.name]: e.target.value}));
         }
     }
 
     const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-            setUser((prev) => ({...prev, [e.target.name]: e.target.value}));
+        setUser((prev) => ({...prev, [e.target.name]: Number(e.target.value)}));
     }
 
     const handleClearSignature = () => {
@@ -90,11 +101,13 @@ const UsersAdd = () => {
                         <div className="flex gap-x-6">
                             <div className="w-1/2 text-sm">
                                 <h1>ID Number</h1>
-                                <input onChange={handleChange} name="id_number" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                <input onChange={handleChange} value={user.id_number} name="id_number" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                    { errors.length > 0 && errors.find((err) => err.path === 'id_number') && <p className="text-red-500 italic">{errors.find((err) => err.path === 'id_number')?.msg}</p> }
                             </div>
                             <div className="w-1/2 text-sm">
                                 <h1>Name</h1>
-                                <input onChange={handleChange} name="name" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                <input onChange={handleChange} value={user.name} name="name" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                { errors.length > 0 && errors.find((err) => err.path === 'name') && <p className="text-red-500 italic">{errors.find((err) => err.path === 'name')?.msg}</p> }
                             </div>
                         </div>
                         <div className="flex gap-x-6 mt-6">
@@ -118,11 +131,13 @@ const UsersAdd = () => {
                         <div className="flex gap-x-6 mt-6">
                             <div className="w-2/3 text-sm">
                                 <h1>Email</h1>
-                                <input onChange={handleChange} name="email" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                <input onChange={handleChange} value={user.email} name="email" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                { errors.length > 0 && errors.find((err) => err.path === 'email') && <p className="text-red-500 italic">{errors.find((err) => err.path === 'email')?.msg}</p> }
                             </div>
                             <div className="w-1/3 text-sm">
                                 <h1>Phone</h1>
-                                <input onChange={handleChange} name="phone" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                <input onChange={handleChange} value={user.phone} name="phone" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" type="text" autoComplete="off"/>
+                                { errors.length > 0 && errors.find((err) => err.path === 'phone') && <p className="text-red-500 italic">{errors.find((err) => err.path === 'phone')?.msg}</p> }
                             </div>
                         </div>
                         <div className="w-full text-sm mt-6">
@@ -139,43 +154,68 @@ const UsersAdd = () => {
                                     </div>
                                 ))}
                             </div>
+                            { errors.length > 0 && errors.find((err) => err.path === 'allowed_app') && <p className="text-red-500 italic">{errors.find((err) => err.path === 'allowed_app')?.msg}</p> }
                         </div>
                         {
                             user.allowed_app.includes("mrf") &&
-                            <div className="w-full text-sm mt-6">
-                                <p>Signature</p>
-                                <div className="">
-                                    <input type="file" className="hidden" onChange={handleChange} id="fileInput" accept=".png"/>
-                                    <div className="h-10 mt-1 flex items-center justify-center gap-x-0.5 bg-[#282828] hover:bg-[#252525] border border-[#363636] shadow shadow-[#181818] rounded w-40 font-semibold cursor-pointer" onClick={() => document.getElementById('fileInput')?.click()}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
-                                            <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
-                                        </svg>
-                                        Browser File
+                            <div className="border border-[#707070] w-[calc(66.666%-6px)] rounded-lg mt-6 p-4 relative">
+                                {/* Title */}
+                                <h1 className="font-semibold absolute top-0 -translate-y-1/2 bg-[#232323] px-2">MRF</h1>
+
+                                {/* Form */}
+                                <div className="w-full text-sm">
+                                    {/* Area */}
+                                    <div className="w-1/2 text-sm">
+                                        <h1>Area</h1>
+                                        <select onChange={handleChangeSelect} name="site_id" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" id="">
+                                            { areas.map((areas) => (
+                                                <option key={areas.id} value={areas.id}>{areas.name}</option>
+                                            )) }
+                                        </select>
                                     </div>
-                                    { user.signature && (
-                                        <div className="w-2/3 h-20 mt-3 flex items-center gap-x-3 border border-[#363636] shadow shadow-[#151515] rounded p-3">
-                                            <img className="h-full border border-[#363636] rounded bg-white" src={signPrev ?? undefined} alt="" />
-                                            <div className="flex-1 flex flex-col">
-                                                <p>{user.signature?.name}</p>
-                                                <p className="text-xs">
-                                                    {
-                                                        (user.signature?.size < 1000) ? 
-                                                        (user.signature.size) + ' bytes'
-                                                        :
-                                                        (user.signature?.size < 1000000) ? 
-                                                        (user.signature.size / 1000).toFixed(1) + ' kB'
-                                                        :
-                                                        (user.signature?.size) && (user.signature?.size / 1000000).toFixed(1) + ' MB'
-                                                    }
-                                                </p>
+
+                                    {/* Signature Upload */}
+                                    <div className="w-full mt-3">
+                                        <p>Signature</p>
+                                        <div className="">
+                                            <input type="file" className="hidden" onChange={handleChange} id="fileInput" accept=".png"/>
+                                            <div className="flex items-end gap-x-2">
+                                                <div className="h-10 mt-1 flex items-center justify-center gap-x-0.5 bg-[#282828] hover:bg-[#252525] border border-[#363636] shadow shadow-[#181818] rounded w-40 font-semibold cursor-pointer" onClick={() => document.getElementById('fileInput')?.click()}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                                                        <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+                                                    </svg>
+                                                    Browser File
+                                                </div>
+                                                <p className="">Accepted format: PNG</p>
                                             </div>
-                                            <button onClick={handleClearSignature} className="h-8 aspect-square p-1 text-red-500 hover:bg-[#212121] rounded border border-[#363636] shadow shadow-[#151515] cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-full" viewBox="0 -960 960 960" fill="currentColor">
-                                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                                                </svg>
-                                            </button>
+                                            { errors.length > 0 && errors.find((err) => err.path === 'signature') && !user.signature && <p className="text-red-500 italic">{errors.find((err) => err.path === 'signature')?.msg}</p> }
+                                            {fileError==='type' && <p className="text-red-500 italic">Unsupported file type. Please upload a PNG image.</p>}
+                                            { user.signature && (
+                                                <div className="w-2/3 h-20 mt-3 flex items-center gap-x-3 border border-[#363636] shadow shadow-[#151515] rounded p-3">
+                                                    <img className="h-full border border-[#363636] rounded bg-white" src={signPrev ?? undefined} alt="" />
+                                                    <div className="flex-1 flex flex-col">
+                                                        <p>{user.signature?.name}</p>
+                                                        <p className="text-xs">
+                                                            {
+                                                                (user.signature?.size < 1000) ? 
+                                                                (user.signature.size) + ' bytes'
+                                                                :
+                                                                (user.signature?.size < 1000000) ? 
+                                                                (user.signature.size / 1000).toFixed(1) + ' kB'
+                                                                :
+                                                                (user.signature?.size) && (user.signature?.size / 1000000).toFixed(1) + ' MB'
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    <button onClick={handleClearSignature} className="h-8 aspect-square p-1 text-red-500 hover:bg-[#212121] rounded border border-[#363636] shadow shadow-[#151515] cursor-pointer">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-full" viewBox="0 -960 960 960" fill="currentColor">
+                                                            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         }
