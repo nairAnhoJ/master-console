@@ -17,6 +17,8 @@ interface User {
     email: string;
     phone: string;
     allowed_app: string[];
+    role: string;
+    mrf_area_id: number[];
     signature: File | null;
 }
 
@@ -60,6 +62,8 @@ export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>
         data.append('email', user.email);
         data.append('phone', user.phone);
         data.append('allowed_app', user.allowed_app.join(';'));
+        data.append('role', user.role);
+        data.append('mrf_area_ids', user.mrf_area_id.join(';'));
         if(user.signature){
             data.append('signature', user.signature)
         }
@@ -67,7 +71,8 @@ export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>
         const response = await config.post('/users/create', data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        return response;
+        console.log(response);
+        return response.data;
     } catch (error: any) {
         return rejectWithValue(error.response.data.errors);
     }

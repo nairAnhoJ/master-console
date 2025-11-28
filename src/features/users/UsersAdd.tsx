@@ -14,6 +14,8 @@ interface User {
     email: string;
     phone: string;
     allowed_app: string[];
+    role: string;
+    mrf_area_id: number[];
     signature: File | null;
 }
 
@@ -28,7 +30,9 @@ const UsersAdd = () => {
         email: '',
         phone: '',
         allowed_app: [],
-        signature: null
+        role: 'site_admin',
+        mrf_area_id: [],
+        signature: null,
     })
     const { departments } = useAppSelector((state) => state.departments)
     const { sites } = useAppSelector((state) => state.sites)
@@ -46,14 +50,19 @@ const UsersAdd = () => {
 
     const handleAllowedAppsClick = (app: string) => {
         setUser((prev) => ({...prev, allowed_app:
-            prev.allowed_app.includes(app) ? prev.allowed_app.filter((aapp) => aapp != app) : [...prev.allowed_app, app]
+            prev.allowed_app.includes(app) ? prev.allowed_app.filter((aapp) => aapp !== app) : [...prev.allowed_app, app]
+        }))
+    }
+
+    const handleMRFAreaClick = (area: number) => {
+        setUser((prev) => ({...prev, mrf_area_id:
+            prev.mrf_area_id.includes(area) ? prev.mrf_area_id.filter((aarea) => aarea !== area) : [...prev.mrf_area_id, area]
         }))
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         setFileError('');
-        console.log(files?.[0].type);
         if(files && files.length > 0){
             if(files?.[0].type === 'image/png'){
                 setUser((prev) => ({...prev, signature: files[0]}));
@@ -81,7 +90,7 @@ const UsersAdd = () => {
 
     return (
         <>
-            <div className="fixed w-screen h-screen bg-[#232323] pl-[264px] p-6 text-gray-300">
+            <div className="fixed w-screen h-screen bg-[#232323] pl-[264px] p-6 text-gray-300 overflow-y-auto">
                 <div className="w-96">
                     
                     {/* Header */}
@@ -158,20 +167,45 @@ const UsersAdd = () => {
                         </div>
                         {
                             user.allowed_app.includes("mrf") &&
-                            <div className="border border-[#707070] w-[calc(66.666%-6px)] rounded-lg mt-6 p-4 relative">
+                            <div className="border border-[#707070] w-full rounded-lg mt-6 p-4 relative">
                                 {/* Title */}
                                 <h1 className="font-semibold absolute top-0 -translate-y-1/2 bg-[#232323] px-2">MRF</h1>
 
                                 {/* Form */}
                                 <div className="w-full text-sm">
-                                    {/* Area */}
-                                    <div className="w-1/2 text-sm">
-                                        <h1>Area</h1>
-                                        <select onChange={handleChangeSelect} name="site_id" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0" id="">
-                                            { areas.map((areas) => (
-                                                <option key={areas.id} value={areas.id}>{areas.name}</option>
-                                            )) }
+                                    {/* Role */}
+                                    <div className="w-1/3">
+                                        <h1>Role</h1>
+                                        <select onChange={handleChangeSelect} name="role" className="rounded p-2 w-full bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0">
+                                            <option value={'site_admin'}>Site Admin</option>
+                                            <option value={'site_tl'}>Site Team Leader</option>
+                                            <option value={'site_supv'}>Site Supervisor</option>
+                                            <option value={'svc_tech'}>Service Technical Support</option>
+                                            <option value={'svc_coor'}>Service Coordinator</option>
+                                            <option value={'svc_head'}>Service Head</option>
+                                            <option value={'rental'}>Rental</option>
+                                            <option value={'mri'}>MRI Encoder</option>
+                                            <option value={'doc_enc'}>Doc Number Encoder</option>
+                                            <option value={'dr_enc'}>DR Encoder</option>
                                         </select>
+                                    </div>
+
+                                    {/* Area */}
+                                    <div className="w-full mt-3">
+                                        <h1>Area</h1>
+                                        { errors.length > 0 && errors.find((err) => err.path === 'area') && !user.signature && <p className="text-red-500 italic">{errors.find((err) => err.path === 'area')?.msg}</p> }
+                                        <div className="w-full grid grid-cols-3 gap-3">
+                                            { areas.map((area) => (
+                                                <div onClick={() => handleMRFAreaClick(area.id)} key={area.id} className={`flex items-center justify-between gap-x-1 cursor-pointer p-3 rounded transition-all border border-[#505050] ${user.mrf_area_id.includes(area.id) && 'border-pink-500'}`}>
+                                                    <p className="whitespace-nowrap overflow-hidden">{area.name}</p>
+                                                    <div className={`flex items-center justify-center border border-[#707070] w-5 h-5 rounded transition-all ${user.mrf_area_id.includes(area.id) && 'bg-pink-500 border-pink-400'}`}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className={`w-4 h-4 text-white transition-all ${user.mrf_area_id.includes(area.id) ? 'opacity-100' : 'opacity-0'}`} viewBox="0 -960 960 960" fill="currentColor">
+                                                            <path d="M382-200 113-469l97-97 172 173 369-369 97 96-466 466Z"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            )) }
+                                        </div>
                                     </div>
 
                                     {/* Signature Upload */}
