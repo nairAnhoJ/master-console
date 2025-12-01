@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect } from "react";
 import { fetchUser } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
+import Notification from "../../Components/Notification";
 import { Link } from "react-router-dom";
 
 const UsersIndex = () => {
@@ -14,6 +15,9 @@ const UsersIndex = () => {
 
     return (
         <>  
+            
+            <Notification />
+
             <div className="w-screen h-screen pl-[264px] p-6 bg-[#232323] text-gray-300">
                 {/* Controller */}
                 <div className="fixed w-[calc(100%-288px)] h-10 flex justify-between">

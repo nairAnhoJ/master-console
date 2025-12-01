@@ -82,7 +82,11 @@ export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearNotification: (state) => {
+            state.success = '';
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUser.pending, (state, action) => {
@@ -97,8 +101,8 @@ const userSlice = createSlice({
                 state.loading = true;
             })
             .addCase(createUser.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.loading = false;
+                state.success = "User has been successfully created."
             })
             .addCase(createUser.rejected, (state, action) => {
                 console.log(action.payload);

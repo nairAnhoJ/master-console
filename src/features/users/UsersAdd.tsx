@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { createUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
@@ -21,6 +21,7 @@ interface User {
 
 const UsersAdd = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
 
     const [user, setUser] = useState<User>({
         id_number: '',
@@ -37,7 +38,7 @@ const UsersAdd = () => {
     const { departments } = useAppSelector((state) => state.departments)
     const { sites } = useAppSelector((state) => state.sites)
     const { areas } = useAppSelector((state) => state.areas)
-    const { errors } = useAppSelector((state) => state.users)
+    const { errors, success } = useAppSelector((state) => state.users)
     const [fileError, setFileError] = useState<string>('')
     const [signPrev,setSignPrev] = useState<string | null>(null);
     const allowedAppsOptions = ['mrf', 'master-console'];
@@ -47,6 +48,12 @@ const UsersAdd = () => {
         dispatch(fetchSites());
         dispatch(fetchArea())
     }, [])
+
+    useEffect(()=>{
+        if(success){
+            navigate('/users')
+        }
+    },[success])
 
     const handleAllowedAppsClick = (app: string) => {
         setUser((prev) => ({...prev, allowed_app:
