@@ -5,6 +5,7 @@ import { createUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
+import { addNotif } from "../notification/notificationSlice";
 
 interface User {
     id_number: string;
@@ -38,7 +39,7 @@ const UsersAdd = () => {
     const { departments } = useAppSelector((state) => state.departments)
     const { sites } = useAppSelector((state) => state.sites)
     const { areas } = useAppSelector((state) => state.areas)
-    const { errors, success } = useAppSelector((state) => state.users)
+    const { errors, notification } = useAppSelector((state) => state.users)
     const [fileError, setFileError] = useState<string>('')
     const [signPrev,setSignPrev] = useState<string | null>(null);
     const allowedAppsOptions = ['mrf', 'master-console'];
@@ -50,10 +51,11 @@ const UsersAdd = () => {
     }, [])
 
     useEffect(()=>{
-        if(success){
+        if(notification){
+            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}))
             navigate('/users')
         }
-    },[success])
+    },[notification])
 
     const handleAllowedAppsClick = (app: string) => {
         setUser((prev) => ({...prev, allowed_app:

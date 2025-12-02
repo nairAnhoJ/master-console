@@ -2,21 +2,27 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect } from "react";
 import { fetchUser } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
-import Notification from "../../Components/Notification";
-import { Link } from "react-router-dom";
+import Notification from "../notification/Notification";
+import { Link, useLocation } from "react-router-dom";
 
 const UsersIndex = () => {
     const dispatch = useAppDispatch();
+    const location = useLocation();
     const { users, loading } = useAppSelector((state) => state.users);
+    const { feature } = useAppSelector((state) => state.notification);
 
     useEffect(() => {
+        console.log(feature);
         dispatch(fetchUser());
     }, [])
 
+
     return (
         <>  
-            
-            <Notification />
+            { (feature === 'users') &&
+                // <div className="pl-[1000px]">{notif.msg}</div>
+                <Notification />
+            }
 
             <div className="w-screen h-screen pl-[264px] p-6 bg-[#232323] text-gray-300">
                 {/* Controller */}

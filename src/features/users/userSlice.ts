@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../config/config";
+import { addNotif } from "../notification/notificationSlice";
 
 export interface UserList {
     id: number;
@@ -7,6 +8,11 @@ export interface UserList {
     name: string;
     department_name: string;
     site_name: string;
+}
+
+export interface Notification {
+    type: "success" | "warning" | "error" | null;
+    msg: string | null;
 }
 
 interface User {
@@ -30,14 +36,14 @@ interface Errors {
 interface userState {
     users: UserList[],
     loading: boolean,
-    success: string,
+    notification: Notification | null,
     errors: Errors[]
 }
 
 const initialState: userState = {
     users: [],
     loading: false,
-    success: '',
+    notification: null,
     errors: []
 }
 
@@ -71,7 +77,6 @@ export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>
         const response = await config.post('/users/create', data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log(response);
         return response.data;
     } catch (error: any) {
         return rejectWithValue(error.response.data.errors);
@@ -84,7 +89,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         clearNotification: (state) => {
-            state.success = '';
+            state.notification = null;
         }
     },
     extraReducers: (builder) => {
@@ -102,7 +107,10 @@ const userSlice = createSlice({
             })
             .addCase(createUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = "User has been successfully created."
+                state.notification = {
+                    type: "success", 
+                    msg: "User has been successfully created."
+                }
             })
             .addCase(createUser.rejected, (state, action) => {
                 console.log(action.payload);
