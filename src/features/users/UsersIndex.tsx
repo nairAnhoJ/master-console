@@ -1,26 +1,38 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchUser } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const UsersIndex = () => {
     const dispatch = useAppDispatch();
-    const location = useLocation();
+    const [search, setSearch] = useState('');
     const { users, loading } = useAppSelector((state) => state.users);
     const { feature } = useAppSelector((state) => state.notification);
 
     useEffect(() => {
-        console.log(feature);
-        dispatch(fetchUser());
+        dispatch(fetchUser(search));
     }, [])
 
+    const handleSearch = () => {
+        dispatch(fetchUser(search));
+    }
+
+    const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === 'Enter'){
+            handleSearch();
+        }
+    }
+
+    const handleClearSearch = () => {
+        setSearch('');
+        dispatch(fetchUser(''));
+    }
 
     return (
         <>  
             { (feature === 'users') &&
-                // <div className="pl-[1000px]">{notif.msg}</div>
                 <Notification />
             }
 
@@ -34,8 +46,14 @@ const UsersIndex = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 absolute left-2 shadow shadow-[#181818] p-1 rounded" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
                         </svg>
-                        <input type="text" className="h-full w-96 pl-9.5 pr-20 rounded bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0"/>
-                        <button className="absolute right-1 py-1.5 px-3 bg-[#181818] hover:bg-[#151515] rounded shadow shadow-[#0c0f14] text-sm font-semibold cursor-pointer">Search</button>
+                        <input onChange={(e)=>setSearch(e.target.value)} onKeyDown={(e) => handleEnterKey(e)} value={search} type="text" className="h-full w-96 pl-9.5 pr-20 rounded bg-[#303030] shadow shadow-[#181818] border border-[#404040] focus:outline-0"/>
+                        <button onClick={handleClearSearch} className="absolute right-19 cursor-pointer text-red-500 hover:text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 -960 960 960" fill="currentColor">
+                                <path d="m256-168-88-88 224-224-224-224 88-88 224 224 224-224 88 88-224 224 224 224-88 88-224-224-224 224Z"/>
+                            </svg>
+                        </button>
+                        
+                        <button onClick={handleSearch} className="absolute right-1 py-1.5 px-3 bg-[#181818] hover:bg-[#151515] rounded shadow shadow-[#0c0f14] text-sm font-semibold cursor-pointer">Search</button>
                     </div>
                 </div>
 

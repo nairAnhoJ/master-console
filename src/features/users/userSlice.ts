@@ -37,20 +37,20 @@ interface userState {
     users: UserList[],
     loading: boolean,
     notification: Notification | null,
-    errors: Errors[]
+    errors: Errors[],
 }
 
 const initialState: userState = {
     users: [],
     loading: false,
     notification: null,
-    errors: []
+    errors: [],
 }
 
 
-export const fetchUser = createAsyncThunk('users/fetch', async () => {
+export const fetchUser = createAsyncThunk('users/fetch', async (search: string = "") => {
     try {
-        const response = await config.get('/users');
+        const response = await config.get(`/users?search=${search}`);
         return response.data;
     } catch (error: any) {
         console.log(error);
@@ -103,6 +103,7 @@ const userSlice = createSlice({
             })
 
             .addCase(createUser.pending, (state, action) => {
+                state.errors = [];
                 state.loading = true;
             })
             .addCase(createUser.fulfilled, (state, action) => {
@@ -119,4 +120,5 @@ const userSlice = createSlice({
     }
 })
 
+export const { clearNotification } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { createUser } from "./userSlice";
+import { clearNotification, createUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
-import { addNotif } from "../notification/notificationSlice";
+import { addNotif, clearNotif } from "../notification/notificationSlice";
 
 interface User {
     id_number: string;
@@ -47,13 +47,15 @@ const UsersAdd = () => {
     useEffect(() => {
         dispatch(fetchDepartment());
         dispatch(fetchSites());
-        dispatch(fetchArea())
+        dispatch(fetchArea());
+        dispatch(clearNotif());
     }, [])
 
     useEffect(()=>{
         if(notification){
-            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}))
-            navigate('/users')
+            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
+            dispatch(clearNotification());
+            navigate('/users');
         }
     },[notification])
 

@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { clearNotif } from "./notificationSlice";
 
-useEffect(() => {
-
-}, [])
 
 const Notification = () => {
     const dispatch = useAppDispatch();
-
     const { type, msg } = useAppSelector((state) => state.notification)
+
+    useEffect(() => {
+        setTimeout(() => {
+            dispatch(clearNotif())
+        }, 3000)
+    }, [])
 
     return (
         <>
