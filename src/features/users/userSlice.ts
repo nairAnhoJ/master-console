@@ -35,6 +35,7 @@ interface Errors {
 
 interface userState {
     users: UserList[],
+    // user: UserList,
     loading: boolean,
     notification: Notification | null,
     errors: Errors[],
@@ -42,13 +43,16 @@ interface userState {
 
 const initialState: userState = {
     users: [],
+    // user: {
+    //     id: 0;
+    // },
     loading: false,
     notification: null,
     errors: [],
 }
 
 
-export const fetchUser = createAsyncThunk('users/fetch', async (search: string = "") => {
+export const fetchUsers = createAsyncThunk('users/fetch', async (search: string = "") => {
     try {
         const response = await config.get(`/users?search=${search}`);
         return response.data;
@@ -56,6 +60,15 @@ export const fetchUser = createAsyncThunk('users/fetch', async (search: string =
         console.log(error);
     }
 })
+
+export const fetchUserById = createAsyncThunk('users/fetch-by-id', async(id: number) => {
+    try {
+        const response = await config.get(`/users/${id}`)
+        return response.data;
+    } catch (error: any) {
+        console.log(error)
+    }
+});
 
 
 export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>('users/create', async (user, {rejectWithValue}) => {
@@ -94,14 +107,26 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUser.pending, (state, action) => {
+            // Fetch Users
+            .addCase(fetchUsers.pending, (state, action) => {
                 state.loading = true;
             })
-            .addCase(fetchUser.fulfilled, (state, action) => {
+            .addCase(fetchUsers.fulfilled, (state, action) => {
                 state.users = action.payload;
                 state.loading = false;
             })
 
+            // Fetch User By ID
+            .addCase(fetchUserById.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(fetchUserById.fulfilled, (state, action) => {
+                console.log(action.payload);
+                // state.user = action.payload;
+                state.loading = false;
+            })
+
+            // Create User
             .addCase(createUser.pending, (state, action) => {
                 state.errors = [];
                 state.loading = true;

@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
-import { fetchUser } from "./userSlice";
+import { fetchUsers } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
 import { Link } from "react-router-dom";
@@ -12,11 +12,11 @@ const UsersIndex = () => {
     const { feature } = useAppSelector((state) => state.notification);
 
     useEffect(() => {
-        dispatch(fetchUser(search));
+        dispatch(fetchUsers(search));
     }, [])
 
     const handleSearch = () => {
-        dispatch(fetchUser(search));
+        dispatch(fetchUsers(search));
     }
 
     const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ const UsersIndex = () => {
 
     const handleClearSearch = () => {
         setSearch('');
-        dispatch(fetchUser(''));
+        dispatch(fetchUsers(''));
     }
 
     return (
@@ -79,7 +79,7 @@ const UsersIndex = () => {
                                         <td className="text-center">{user.department_name}</td>
                                         <td className="text-center">{user.site_name}</td>
                                         <td className="text-center whitespace-nowrap">
-                                            <button className="text-blue-500 font-semibold cursor-pointer">EDIT</button>
+                                            <Link to={`edit/${user.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button className="text-orange-500 font-semibold cursor-pointer">RESET</button>
                                             <span className="mx-1 cursor-default">|</span> 

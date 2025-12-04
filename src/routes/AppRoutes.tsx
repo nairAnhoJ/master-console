@@ -4,6 +4,7 @@ import UsersIndex from '../features/users/UsersIndex';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '../layouts/MainLayout';
 import UsersAdd from '../features/users/UsersAdd';
+import UsersEdit from '../features/users/UsersEdit';
 
 const AppRoutes = () => {
     return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
                     <Route path="/" element={<UsersIndex />}/>
                     <Route path="/users" element={<UsersIndex />}/>
                     <Route path="/users/add" element={<UsersAdd />}/>
+                    <Route path="/users/edit/:id" element={<UsersEdit />}/>
                 </Route>
             </Route>
 
