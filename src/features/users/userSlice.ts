@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../config/config";
-import { addNotif } from "../notification/notificationSlice";
 
 export interface UserList {
     id: number;
@@ -28,6 +27,20 @@ interface User {
     signature: File | null;
 }
 
+interface SelectedUser {
+    id: number;
+    id_number: string;
+    name: string;
+    department_id: number;
+    site_id: number;
+    email: string;
+    phone: string;
+    allowed_app: string[];
+    role: string;
+    mrf_area_id: number[];
+    signature: string;
+}
+
 interface Errors {
     path: string;
     msg: string;
@@ -35,7 +48,7 @@ interface Errors {
 
 interface userState {
     users: UserList[],
-    // user: UserList,
+    user: SelectedUser,
     loading: boolean,
     notification: Notification | null,
     errors: Errors[],
@@ -43,9 +56,19 @@ interface userState {
 
 const initialState: userState = {
     users: [],
-    // user: {
-    //     id: 0;
-    // },
+    user: {
+        id: 0,
+        id_number: '',
+        name: '',
+        department_id: 0,
+        site_id: 0,
+        email: '',
+        phone: '',
+        allowed_app: [],
+        role: '',
+        mrf_area_id: [],
+        signature: '',
+    },
     loading: false,
     notification: null,
     errors: [],
@@ -63,8 +86,36 @@ export const fetchUsers = createAsyncThunk('users/fetch', async (search: string 
 
 export const fetchUserById = createAsyncThunk('users/fetch-by-id', async(id: number) => {
     try {
-        const response = await config.get(`/users/${id}`)
-        return response.data;
+        const response = await config.get(`/users/${id}`);
+        const allowed_app = (response.data.allowed_app).split(';')
+
+        let signaturePath = '';
+        let userRole = '';
+        let areaArray: number[] = [];
+        if(allowed_app.includes('mrf')){
+            const signature = await config.get(`/user-signature/${id}`);
+            signaturePath = signature.data.path;
+
+            const role = await config.get(`/mrf/user-role/${id}`);
+            userRole = role.data[0].role;
+            (role.data as {area_id: number}[]).map((erole) => areaArray.push(erole.area_id))
+        }
+
+        const userData: SelectedUser = {
+            id: response.data.id,
+            id_number: response.data.id_number,
+            name: response.data.name,
+            department_id: response.data.department_id,
+            site_id: response.data.site_id,
+            email: response.data.email,
+            phone: response.data.phone,
+            allowed_app: allowed_app,
+            role: userRole,
+            mrf_area_id: areaArray,
+            signature: signaturePath,
+        }
+
+        return userData as SelectedUser;
     } catch (error: any) {
         console.log(error)
     }
@@ -108,7 +159,7 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // Fetch Users
-            .addCase(fetchUsers.pending, (state, action) => {
+            .addCase(fetchUsers.pending, (state) => {
                 state.loading = true;
             })
             .addCase(fetchUsers.fulfilled, (state, action) => {
@@ -117,21 +168,21 @@ const userSlice = createSlice({
             })
 
             // Fetch User By ID
-            .addCase(fetchUserById.pending, (state, action) => {
+            .addCase(fetchUserById.pending, (state,) => {
                 state.loading = true;
             })
             .addCase(fetchUserById.fulfilled, (state, action) => {
-                console.log(action.payload);
-                // state.user = action.payload;
+                if(action.payload){state.user = action.payload};
                 state.loading = false;
+                console.log(state.user);
             })
 
             // Create User
-            .addCase(createUser.pending, (state, action) => {
+            .addCase(createUser.pending, (state) => {
                 state.errors = [];
                 state.loading = true;
             })
-            .addCase(createUser.fulfilled, (state, action) => {
+            .addCase(createUser.fulfilled, (state) => {
                 state.loading = false;
                 state.notification = {
                     type: "success", 
@@ -139,7 +190,6 @@ const userSlice = createSlice({
                 }
             })
             .addCase(createUser.rejected, (state, action) => {
-                console.log(action.payload);
                 state.errors = action.payload ? action.payload : [];
             })
     }

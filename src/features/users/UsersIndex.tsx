@@ -79,7 +79,7 @@ const UsersIndex = () => {
                                         <td className="text-center">{user.department_name}</td>
                                         <td className="text-center">{user.site_name}</td>
                                         <td className="text-center whitespace-nowrap">
-                                            <Link to={`edit/${user.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
+                                            <Link to={`/users/edit/${user.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button className="text-orange-500 font-semibold cursor-pointer">RESET</button>
                                             <span className="mx-1 cursor-default">|</span> 

@@ -28,16 +28,7 @@ const UsersEdit = () => {
 
     const selectedUser = useAppSelector(state => state.users)
     const [user, setUser] = useState<User>({
-        id: selectedUser.id,
-        id_number: selectedUser?.id_number,
-        name: selectedUser?.name,
-        department_id: 5,
-        site_id: 1,
-        email: '',
-        phone: '',
-        allowed_app: [],
-        role: 'site_admin',
-        mrf_area_id: [],
+        ...selectedUser.user,
         signature: null,
     })
     const { departments } = useAppSelector((state) => state.departments)
@@ -49,13 +40,19 @@ const UsersEdit = () => {
     const allowedAppsOptions = ['mrf', 'master-console'];
 
     useEffect(() => {
-        console.log(id)
         dispatch(fetchUserById(Number(id)))
         dispatch(fetchDepartment());
         dispatch(fetchSites());
         dispatch(fetchArea());
         dispatch(clearNotif());
     }, [])
+
+    useEffect(() => {
+        setUser({
+            ...selectedUser.user,
+            signature: null,
+        })
+    }, [selectedUser])
 
     useEffect(()=>{
         if(notification){
