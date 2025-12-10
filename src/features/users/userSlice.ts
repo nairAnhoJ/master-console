@@ -38,7 +38,7 @@ interface SelectedUser {
     allowed_app: string[];
     role: string;
     mrf_area_id: number[];
-    signature: string;
+    signature: File | string | null;
 }
 
 interface Errors {
@@ -94,10 +94,12 @@ export const fetchUserById = createAsyncThunk('users/fetch-by-id', async(id: num
         let areaArray: number[] = [];
         if(allowed_app.includes('mrf')){
             const signature = await config.get(`/user-signature/${id}`);
-            signaturePath = signature.data.path;
+            signaturePath = signature?.data.path;
 
             const role = await config.get(`/mrf/user-role/${id}`);
-            userRole = role.data[0].role;
+            if(role.data.length > 0){
+                userRole = role.data[0].role;
+            }
             (role.data as {area_id: number}[]).map((erole) => areaArray.push(erole.area_id))
         }
 
@@ -147,6 +149,33 @@ export const createUser = createAsyncThunk<any, User, { rejectValue: Errors[] }>
     }
 })
 
+export const updateUser = createAsyncThunk<any, SelectedUser, { rejectValue: Errors[] }>('users/update', async(user, {rejectWithValue}) => {
+    try {
+        const data = new FormData();
+        data.append('id_number', user.id_number);
+        data.append('name', user.name);
+        data.append('department_id', String(user.department_id));
+        data.append('site_id', String(user.site_id));
+        data.append('email', user.email);
+        data.append('phone', user.phone);
+        data.append('allowed_app', user.allowed_app.join(';'));
+        data.append('role', user.role);
+        data.append('mrf_area_ids', user.mrf_area_id.join(';'));
+        if(user.signature){
+            data.append('signature', user.signature)
+        }
+        console.log(data);
+
+        const response = await config.put(`/users/update/${user.id}`, data, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.response.data.errors);
+    }
+})
+
 
 const userSlice = createSlice({
     name: 'user',
@@ -190,6 +219,22 @@ const userSlice = createSlice({
                 }
             })
             .addCase(createUser.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
+            })
+
+            // Create User
+            .addCase(updateUser.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(updateUser.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "User has been successfully updated."
+                }
+            })
+            .addCase(updateUser.rejected, (state, action) => {
                 state.errors = action.payload ? action.payload : [];
             })
     }

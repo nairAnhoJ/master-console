@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, createUser, fetchUserById } from "./userSlice";
+import { clearNotification, createUser, fetchUserById, updateUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
@@ -11,8 +11,8 @@ interface User {
     id: number;
     id_number: string;
     name: string;
-    department_id: number | null;
-    site_id: number | null;
+    department_id: number;
+    site_id: number;
     email: string;
     phone: string;
     allowed_app: string[];
@@ -53,7 +53,7 @@ const UsersEdit = () => {
             signature: null,
         })
     }, [selectedUser])
-
+  
     useEffect(()=>{
         if(notification){
             dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
@@ -99,7 +99,7 @@ const UsersEdit = () => {
     }
 
     const handleSubmit = () => {
-        dispatch(createUser(user));
+        dispatch(updateUser(user));
     }
 
     return (
