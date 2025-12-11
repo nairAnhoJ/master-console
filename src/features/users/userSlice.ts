@@ -176,6 +176,18 @@ export const updateUser = createAsyncThunk<any, SelectedUser, { rejectValue: Err
     }
 })
 
+export const resetUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/reset', async(id, {rejectWithValue}) => {
+    try {
+        const response = await config.patch(`/users/reset/${id}`, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.response.data.errors);
+    }
+})
+
 
 const userSlice = createSlice({
     name: 'user',
@@ -222,7 +234,7 @@ const userSlice = createSlice({
                 state.errors = action.payload ? action.payload : [];
             })
 
-            // Create User
+            // Update User
             .addCase(updateUser.pending, (state) => {
                 state.errors = [];
                 state.loading = true;
@@ -237,6 +249,24 @@ const userSlice = createSlice({
             .addCase(updateUser.rejected, (state, action) => {
                 state.errors = action.payload ? action.payload : [];
             })
+            // Update User
+
+            // Reset Password
+            .addCase(resetUser.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(resetUser.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "Password reset complete."
+                }
+            })
+            .addCase(resetUser.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
+            })
+            // Reset Password
     }
 })
 

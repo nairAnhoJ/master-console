@@ -1,19 +1,39 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
-import { fetchUsers } from "./userSlice";
+import { fetchUsers, resetUser, clearNotification } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
 import { Link } from "react-router-dom";
+import Confirmation from "../../Components/Confirmation";
+import { addNotif } from "../notification/notificationSlice";
 
 const UsersIndex = () => {
     const dispatch = useAppDispatch();
     const [search, setSearch] = useState('');
+    const [selectedId, setSelectedId] = useState<number>(0);
+    const [showResetModal, setShowResetModal] = useState(false);
+    const [confirmationDetails, setConfirmationDetails] = useState({
+        title: '',
+        body: '',
+        confirmButtonName: ''
+    })
+
     const { users, loading } = useAppSelector((state) => state.users);
     const { feature } = useAppSelector((state) => state.notification);
+    const { notification } = useAppSelector((state) => state.users)
 
     useEffect(() => {
         dispatch(fetchUsers(search));
     }, [])
+      
+    useEffect(()=>{
+        if(notification){
+            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
+            dispatch(clearNotification());
+            // navigate('/users');
+            handleCloseConfirmationModal();
+        }
+    },[notification])
 
     const handleSearch = () => {
         dispatch(fetchUsers(search));
@@ -30,10 +50,38 @@ const UsersIndex = () => {
         dispatch(fetchUsers(''));
     }
 
+    const handleCloseConfirmationModal = () => {
+        setShowResetModal(false)
+    }
+
+    const handleConfirmReset = () => {
+        dispatch(resetUser(selectedId))
+    }
+
+    const handleResetButton = (id: number) => {
+        setShowResetModal(true)
+        setSelectedId(id);
+        setConfirmationDetails({
+            title: 'Reset Password',
+            body: 'Are you sure you want to reset the password of this user?',
+            confirmButtonName: 'Yes'
+        })
+    }
+
     return (
         <>  
             { (feature === 'users') &&
                 <Notification />
+            }
+
+            { showResetModal &&
+                <Confirmation 
+                    title={confirmationDetails.title} 
+                    body={confirmationDetails.body} 
+                    confirmButtonName={confirmationDetails.confirmButtonName}
+                    confirmButton={handleConfirmReset}
+                    closeButton={handleCloseConfirmationModal}
+                />
             }
 
             <div className="w-screen h-screen pl-[264px] p-6 bg-[#232323] text-gray-300">
@@ -73,7 +121,7 @@ const UsersIndex = () => {
                             <tbody>
                                 { loading && (<TableLoading colSpan={5} />)}
                                 { users?.map((user) => (
-                                    <tr className="cursor-pointer hover:bg-[#303030]" key={user.id}>
+                                    <tr className="cursor-pointer hover:bg-[#303030] focus:bg-[#303030]" key={user.id}>
                                         <th className="text-center py-2">{user.id_number}</th>
                                         <td className="text-center">{user.name}</td>
                                         <td className="text-center">{user.department_name}</td>
@@ -81,7 +129,7 @@ const UsersIndex = () => {
                                         <td className="text-center whitespace-nowrap">
                                             <Link to={`/users/edit/${user.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
                                             <span className="mx-1 cursor-default">|</span> 
-                                            <button className="text-orange-500 font-semibold cursor-pointer">RESET</button>
+                                            <button onClick={()=>handleResetButton(user.id)} className="text-orange-500 font-semibold cursor-pointer">RESET</button>
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button className="text-red-500 font-semibold cursor-pointer">DEACTIVATE</button>
                                             <span className="mx-1 cursor-default">|</span> 

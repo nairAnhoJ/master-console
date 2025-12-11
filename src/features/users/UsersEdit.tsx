@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, createUser, fetchUserById, updateUser } from "./userSlice";
+import { clearNotification, fetchUserById, updateUser } from "./userSlice";
 import { fetchDepartment } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
