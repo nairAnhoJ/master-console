@@ -201,6 +201,18 @@ export const deactivateUser = createAsyncThunk<any, number, { rejectValue: Error
     }
 })
 
+export const reactivateUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/deactivate', async(id, {rejectWithValue}) => {
+    try {
+        const response = await config.patch(`/users/reactivate/${id}`, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.response.data.errors);
+    }
+})
+
 
 const userSlice = createSlice({
     name: 'user',
