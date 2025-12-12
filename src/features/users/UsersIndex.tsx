@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
-import { fetchUsers, resetUser, clearNotification } from "./userSlice";
+import { fetchUsers, resetUser, clearNotification, deactivateUser } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
 import { Link } from "react-router-dom";
@@ -30,7 +30,7 @@ const UsersIndex = () => {
         if(notification){
             dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
             dispatch(clearNotification());
-            // navigate('/users');
+            dispatch(fetchUsers(search));
             handleCloseConfirmationModal();
         }
     },[notification])
@@ -54,8 +54,12 @@ const UsersIndex = () => {
         setShowResetModal(false)
     }
 
-    const handleConfirmReset = () => {
-        dispatch(resetUser(selectedId))
+    const handleConfirm = () => {
+        if(confirmationDetails.title === 'Reset Password'){
+            dispatch(resetUser(selectedId))
+        }else if(confirmationDetails.title === 'Deactivate Account'){
+            dispatch(deactivateUser(selectedId))
+        }
     }
 
     const handleResetButton = (id: number) => {
@@ -64,6 +68,16 @@ const UsersIndex = () => {
         setConfirmationDetails({
             title: 'Reset Password',
             body: 'Are you sure you want to reset the password of this user?',
+            confirmButtonName: 'Yes'
+        })
+    }
+
+    const handleDeactivateButton = (id: number) => {
+        setShowResetModal(true)
+        setSelectedId(id);
+        setConfirmationDetails({
+            title: 'Deactivate Account',
+            body: 'Are you sure you want to deactivate this account?',
             confirmButtonName: 'Yes'
         })
     }
@@ -79,7 +93,7 @@ const UsersIndex = () => {
                     title={confirmationDetails.title} 
                     body={confirmationDetails.body} 
                     confirmButtonName={confirmationDetails.confirmButtonName}
-                    confirmButton={handleConfirmReset}
+                    confirmButton={handleConfirm}
                     closeButton={handleCloseConfirmationModal}
                 />
             }
@@ -131,7 +145,7 @@ const UsersIndex = () => {
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button onClick={()=>handleResetButton(user.id)} className="text-orange-500 font-semibold cursor-pointer">RESET</button>
                                             <span className="mx-1 cursor-default">|</span> 
-                                            <button className="text-red-500 font-semibold cursor-pointer">DEACTIVATE</button>
+                                            <button onClick={()=>handleDeactivateButton(user.id)} className={`${(user.is_active === 1) ? 'text-red-500' : 'text-emerald-500' } font-semibold cursor-pointer`}>{(user.is_active === 1) ? 'DEACTIVATE' : 'REACTIVATE'}</button>
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button className="text-red-500 font-semibold cursor-pointer">DELETE</button>
                                         </td>

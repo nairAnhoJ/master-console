@@ -7,6 +7,7 @@ export interface UserList {
     name: string;
     department_name: string;
     site_name: string;
+    is_active: number;
 }
 
 export interface Notification {
@@ -188,6 +189,18 @@ export const resetUser = createAsyncThunk<any, number, { rejectValue: Errors[] }
     }
 })
 
+export const deactivateUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/deactivate', async(id, {rejectWithValue}) => {
+    try {
+        const response = await config.patch(`/users/deactivate/${id}`, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.response.data.errors);
+    }
+})
+
 
 const userSlice = createSlice({
     name: 'user',
@@ -267,6 +280,23 @@ const userSlice = createSlice({
                 state.errors = action.payload ? action.payload : [];
             })
             // Reset Password
+
+            // Deactivate User
+            .addCase(deactivateUser.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(deactivateUser.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "Account has been deactivated successfully."
+                }
+            })
+            .addCase(deactivateUser.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
+            })
+            // Deactivate User
     }
 })
 
