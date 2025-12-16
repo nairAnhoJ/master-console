@@ -201,9 +201,21 @@ export const deactivateUser = createAsyncThunk<any, number, { rejectValue: Error
     }
 })
 
-export const reactivateUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/deactivate', async(id, {rejectWithValue}) => {
+export const reactivateUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/reactivate', async(id, {rejectWithValue}) => {
     try {
         const response = await config.patch(`/users/reactivate/${id}`, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error: any) {
+        console.log(error);
+        return rejectWithValue(error.response.data.errors);
+    }
+})
+
+export const deleteUser = createAsyncThunk<any, number, { rejectValue: Errors[] }>('users/delete', async(id, {rejectWithValue}) => {
+    try {
+        const response = await config.patch(`/users/delete/${id}`, {
             headers: { "Content-Type": "multipart/form-data" },
         });
         return response.data;
@@ -309,6 +321,40 @@ const userSlice = createSlice({
                 state.errors = action.payload ? action.payload : [];
             })
             // Deactivate User
+
+            // Reactivate User
+            .addCase(reactivateUser.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(reactivateUser.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "Account has been reactivated successfully."
+                }
+            })
+            .addCase(reactivateUser.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
+            })
+            // Reactivate User
+
+            // Delete User
+            .addCase(deleteUser.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(deleteUser.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "Account has been deleted successfully."
+                }
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
+            })
+            // Delete User
     }
 })
 

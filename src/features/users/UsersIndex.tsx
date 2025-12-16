@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
-import { fetchUsers, resetUser, clearNotification, deactivateUser, reactivateUser } from "./userSlice";
+import { fetchUsers, resetUser, clearNotification, deactivateUser, reactivateUser, deleteUser } from "./userSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
 import { Link } from "react-router-dom";
@@ -61,6 +61,8 @@ const UsersIndex = () => {
             dispatch(deactivateUser(selectedId))
         }else if(confirmationDetails.title === 'Reactivate Account'){
             dispatch(reactivateUser(selectedId))
+        }else if(confirmationDetails.title === 'Delete Account'){
+            dispatch(deleteUser(selectedId))
         }
     }
 
@@ -85,11 +87,21 @@ const UsersIndex = () => {
     }
 
     const handleReactivateButton = (id: number) => {
-        setShowResetModal(true)
+        setShowResetModal(true) 
         setSelectedId(id);
         setConfirmationDetails({
             title: 'Reactivate Account',
             body: 'Are you sure you want to reactivate this account?',
+            confirmButtonName: 'Yes'
+        })
+    }
+
+    const handleDeleteButton = (id: number) => {
+        setShowResetModal(true)
+        setSelectedId(id);
+        setConfirmationDetails({
+            title: 'Delete Account',
+            body: 'Are you sure you want to delete this account?',
             confirmButtonName: 'Yes'
         })
     }
@@ -159,7 +171,7 @@ const UsersIndex = () => {
                                             <span className="mx-1 cursor-default">|</span> 
                                             <button onClick={()=>{if(user.is_active === 1){handleDeactivateButton(user.id)}else{handleReactivateButton(user.id)}}} className={`${(user.is_active === 1) ? 'text-red-500' : 'text-emerald-500' } font-semibold cursor-pointer`}>{(user.is_active === 1) ? 'DEACTIVATE' : 'REACTIVATE'}</button>
                                             <span className="mx-1 cursor-default">|</span> 
-                                            <button className="text-red-500 font-semibold cursor-pointer">DELETE</button>
+                                            <button onClick={()=>handleDeleteButton(user.id)} className="text-red-500 font-semibold cursor-pointer">DELETE</button>
                                         </td>
                                     </tr>
                                 )) }
