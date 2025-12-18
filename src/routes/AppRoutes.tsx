@@ -18,6 +18,7 @@ const AppRoutes = () => {
                     <Route path="/users/edit/:id" element={<UsersEdit />}/>
 
                     <Route path="/departments" element={<DepartmentsIndex />}/>
+                    <Route path="/departments/add" element={<UsersAdd />}/>
                 </Route>
             </Route>
 
