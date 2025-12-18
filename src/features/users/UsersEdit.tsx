@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { clearNotification, fetchUserById, updateUser } from "./userSlice";
-import { fetchDepartment } from "../departments/departmentSlice";
+import { fetchDepartments } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
 import { addNotif, clearNotif } from "../notification/notificationSlice";
@@ -41,7 +41,7 @@ const UsersEdit = () => {
 
     useEffect(() => {
         dispatch(fetchUserById(Number(id)))
-        dispatch(fetchDepartment());
+        dispatch(fetchDepartments(''));
         dispatch(fetchSites());
         dispatch(fetchArea());
         dispatch(clearNotif());

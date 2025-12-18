@@ -25,12 +25,12 @@ const Navigation = () => {
                             </svg>
                             Users 
                         </Link>
-                        <button className="w-full py-3 px-3 flex gap-x-3 items-center text-white text-sm rounded-lg hover:bg-[#282828] cursor-pointer">
+                        <Link to={'/departments'} className="w-full py-3 px-3 flex gap-x-3 items-center text-white text-sm rounded-lg hover:bg-[#282828] cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 -960 960 960">
                                 <path d="M626-146v-120H466v-400H334v120H106v-268h228v120h292v-120h228v268H626v-120H494v372h132v-120h228v268H626ZM134-786v212-212Zm520 400v212-212Zm0-400v212-212Zm0 212h172v-212H654v212Zm0 400h172v-212H654v212ZM134-574h172v-212H134v212Z"/>
                             </svg>
                             Department
-                        </button>
+                        </Link>
                         <button className="w-full py-3 px-3 flex gap-x-3 items-center text-white text-sm rounded-lg hover:bg-[#282828] cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 -960 960 960">
                                 <path d="m600-176-240-84-150 58q-14 5-26-3t-12-23v-468q0-10 4.5-18.5T190-726l170-58 240 84 150-58q14-5 26 1.5t12 20.5v476q0 11-6 19t-16 11l-166 54Zm-14-34v-468l-212-74v468l212 74Zm28 0 146-48v-474l-146 54v468Zm-414-18 146-56v-468l-146 50v474Zm414-450v468-468Zm-268-74v468-468Z"/>

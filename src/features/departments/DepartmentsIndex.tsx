@@ -1,13 +1,16 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
-import { fetchUsers, resetUser, clearNotification, deactivateUser, reactivateUser, deleteUser } from "./userSlice";
+import { fetchDepartments, 
+        clearNotification,
+    // resetUser,  deactivateUser, reactivateUser, deleteUser 
+} from "./departmentSlice";
 import TableLoading from "../../Components/TableLoading";
 import Notification from "../notification/Notification";
 import { Link } from "react-router-dom";
 import Confirmation from "../../Components/Confirmation";
 import { addNotif } from "../notification/notificationSlice";
 
-const UsersIndex = () => {
+const DepartmentsIndex = () => {
     const dispatch = useAppDispatch();
     const [search, setSearch] = useState('');
     const [selectedId, setSelectedId] = useState<number>(0);
@@ -18,25 +21,25 @@ const UsersIndex = () => {
         confirmButtonName: ''
     })
 
-    const { users, loading } = useAppSelector((state) => state.users);
+    const { departments, loading } = useAppSelector((state) => state.departments);
     const { feature } = useAppSelector((state) => state.notification);
     const { notification } = useAppSelector((state) => state.users)
 
     useEffect(() => {
-        dispatch(fetchUsers(search));
+        dispatch(fetchDepartments(search));
     }, [])
       
     useEffect(()=>{
         if(notification){
             dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
             dispatch(clearNotification());
-            dispatch(fetchUsers(search));
+            dispatch(fetchDepartments(search));
             handleCloseConfirmationModal();
         }
     },[notification])
 
     const handleSearch = () => {
-        dispatch(fetchUsers(search));
+        dispatch(fetchDepartments(search));
     }
 
     const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -47,7 +50,7 @@ const UsersIndex = () => {
 
     const handleClearSearch = () => {
         setSearch('');
-        dispatch(fetchUsers(''));
+        dispatch(fetchDepartments(''));
     }
 
     const handleCloseConfirmationModal = () => {
@@ -55,46 +58,46 @@ const UsersIndex = () => {
     }
 
     const handleConfirm = () => {
-        if(confirmationDetails.title === 'Reset Password'){
-            dispatch(resetUser(selectedId))
-        }else if(confirmationDetails.title === 'Deactivate Account'){
-            dispatch(deactivateUser(selectedId))
-        }else if(confirmationDetails.title === 'Reactivate Account'){
-            dispatch(reactivateUser(selectedId))
-        }else if(confirmationDetails.title === 'Delete Account'){
-            dispatch(deleteUser(selectedId))
-        }
+        // if(confirmationDetails.title === 'Reset Password'){
+        //     dispatch(resetUser(selectedId))
+        // }else if(confirmationDetails.title === 'Deactivate Account'){
+        //     dispatch(deactivateUser(selectedId))
+        // }else if(confirmationDetails.title === 'Reactivate Account'){
+        //     dispatch(reactivateUser(selectedId))
+        // }else if(confirmationDetails.title === 'Delete Account'){
+        //     dispatch(deleteUser(selectedId))
+        // }
     }
 
-    const handleResetButton = (id: number) => {
-        setShowResetModal(true)
-        setSelectedId(id);
-        setConfirmationDetails({
-            title: 'Reset Password',
-            body: 'Are you sure you want to reset the password of this user?',
-            confirmButtonName: 'Yes'
-        })
-    }
+    // const handleResetButton = (id: number) => {
+    //     setShowResetModal(true)
+    //     setSelectedId(id);
+    //     setConfirmationDetails({
+    //         title: 'Reset Password',
+    //         body: 'Are you sure you want to reset the password of this user?',
+    //         confirmButtonName: 'Yes'
+    //     })
+    // }
 
-    const handleDeactivateButton = (id: number) => {
-        setShowResetModal(true)
-        setSelectedId(id);
-        setConfirmationDetails({
-            title: 'Deactivate Account',
-            body: 'Are you sure you want to deactivate this account?',
-            confirmButtonName: 'Yes'
-        })
-    }
+    // const handleDeactivateButton = (id: number) => {
+    //     setShowResetModal(true)
+    //     setSelectedId(id);
+    //     setConfirmationDetails({
+    //         title: 'Deactivate Account',
+    //         body: 'Are you sure you want to deactivate this account?',
+    //         confirmButtonName: 'Yes'
+    //     })
+    // }
 
-    const handleReactivateButton = (id: number) => {
-        setShowResetModal(true) 
-        setSelectedId(id);
-        setConfirmationDetails({
-            title: 'Reactivate Account',
-            body: 'Are you sure you want to reactivate this account?',
-            confirmButtonName: 'Yes'
-        })
-    }
+    // const handleReactivateButton = (id: number) => {
+    //     setShowResetModal(true) 
+    //     setSelectedId(id);
+    //     setConfirmationDetails({
+    //         title: 'Reactivate Account',
+    //         body: 'Are you sure you want to reactivate this account?',
+    //         confirmButtonName: 'Yes'
+    //     })
+    // }
 
     const handleDeleteButton = (id: number) => {
         setShowResetModal(true)
@@ -124,12 +127,12 @@ const UsersIndex = () => {
 
             <div className="w-screen h-screen pl-[264px] p-6 bg-[#232323] text-gray-300">
                 {/* Title */}
-                <h1 className="text-3xl font-bold">USERS</h1>
+                <h1 className="text-3xl font-bold">DEPARTMENTS</h1>
 
                 {/* Controller */}
                 <div className="w-full h-10 mt-6 flex justify-between">
-                    <div className="w-32">
-                        <Link to={'/users/add'} className="block p-2 font-bold text-white bg-blue-700 over:bg-blue-800 rounded cursor-pointer shadow text-center">New User</Link>
+                    <div className="w-44">
+                        <Link to={'/users/add'} className="block p-2 font-bold text-white bg-blue-700 over:bg-blue-800 rounded cursor-pointer shadow text-center">New Department</Link>
                     </div>
                     <div className="h-full relative flex items-center gap-x-3 ">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 absolute left-2 shadow shadow-[#181818] p-1 rounded" viewBox="0 -960 960 960" fill="currentColor">
@@ -148,33 +151,23 @@ const UsersIndex = () => {
 
                 {/* User List */}
                 <div className="w-full h-[calc(100%-100px)] mt-3 overflow-hidden">
-                    <div className="w-full h-full overflow-auto">
+                    <div className="w-[350px] h-full overflow-auto">
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="bg-[#181818]">
-                                    <th className="py-3">ID Number</th>
                                     <th>Name</th>
-                                    <th>Department</th>
-                                    <th>Site</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 { loading && (<TableLoading colSpan={5} />)}
-                                { users?.map((user) => (
-                                    <tr className="cursor-pointer hover:bg-[#303030] focus:bg-[#303030]" key={user.id}>
-                                        <th className="text-center py-2">{user.id_number}</th>
-                                        <td className="text-center">{user.name}</td>
-                                        <td className="text-center">{user.department_name}</td>
-                                        <td className="text-center">{user.site_name}</td>
+                                { departments?.map((department) => (
+                                    <tr className="cursor-pointer hover:bg-[#303030] focus:bg-[#303030]" key={department.id}>
+                                        <td className="text-left px-6">{department.name}</td>
                                         <td className="text-center whitespace-nowrap">
-                                            <Link to={`/users/edit/${user.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
+                                            <Link to={`/departments/edit/${department.id}`} className="text-blue-500 font-semibold cursor-pointer">EDIT</Link>
                                             <span className="mx-1 cursor-default">|</span> 
-                                            <button onClick={()=>handleResetButton(user.id)} className="text-orange-500 font-semibold cursor-pointer">RESET</button>
-                                            <span className="mx-1 cursor-default">|</span> 
-                                            <button onClick={()=>{if(user.is_active === 1){handleDeactivateButton(user.id)}else{handleReactivateButton(user.id)}}} className={`${(user.is_active === 1) ? 'text-red-500' : 'text-emerald-500' } font-semibold cursor-pointer`}>{(user.is_active === 1) ? 'DEACTIVATE' : 'REACTIVATE'}</button>
-                                            <span className="mx-1 cursor-default">|</span> 
-                                            <button onClick={()=>handleDeleteButton(user.id)} className="text-red-500 font-semibold cursor-pointer">DELETE</button>
+                                            <button onClick={()=>handleDeleteButton(department.id)} className="text-red-500 font-semibold cursor-pointer">DELETE</button>
                                         </td>
                                     </tr>
                                 )) }
@@ -188,4 +181,4 @@ const UsersIndex = () => {
     )
 }
 
-export default UsersIndex;
+export default DepartmentsIndex;

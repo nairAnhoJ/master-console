@@ -6,17 +6,33 @@ export interface DepartmentList {
     name: string;
 }
 
+export interface Notification {
+    type: "success" | "warning" | "error" | null;
+    msg: string | null;
+}
+
+interface Errors {
+    path: string;
+    msg: string;
+}
+
 interface DepartmentState {
-    departments: DepartmentList[]
+    loading: boolean;
+    departments: DepartmentList[],
+    notification: Notification | null,
+    errors: Errors[],
 }
 
 const initialState: DepartmentState = {
-    departments: []
+    departments: [],
+    loading: false,
+    notification: null,
+    errors: [],
 }
 
-export const fetchDepartment = createAsyncThunk('departments/fetch', async() => {
+export const fetchDepartments = createAsyncThunk('departments/fetch', async(search: string = "") => {
     try {
-        const res = await config.get('/departments');
+        const res = await config.get(`/departments?search=${search}`);
         return res.data;
     } catch (error) {
         console.log(error)
@@ -26,13 +42,22 @@ export const fetchDepartment = createAsyncThunk('departments/fetch', async() => 
 const departmentSlice = createSlice({
     name: 'department',
     initialState,
-    reducers: {},
+    reducers: {
+        clearNotification: (state) => {
+            state.notification = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchDepartment.fulfilled, (state, action) => {
+            .addCase(fetchDepartments.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchDepartments.fulfilled, (state, action) => {
+                state.loading = false;
                 state.departments = action.payload
             })
     }
 })
 
+export const { clearNotification } = departmentSlice.actions;
 export default departmentSlice.reducer;
