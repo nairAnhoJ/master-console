@@ -220,7 +220,6 @@ export const deleteUser = createAsyncThunk<any, number, { rejectValue: Errors[] 
         });
         return response.data;
     } catch (error: any) {
-        console.log(error);
         return rejectWithValue(error.response.data.errors);
     }
 })

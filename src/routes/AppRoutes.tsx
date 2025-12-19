@@ -1,11 +1,16 @@
 import {  Route, Routes } from 'react-router-dom';
 import LoginPage from '../features/auth/LoginPage'
-import UsersIndex from '../features/users/UsersIndex';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '../layouts/MainLayout';
+
+// Users Routes
+import UsersIndex from '../features/users/UsersIndex';
 import UsersAdd from '../features/users/UsersAdd';
 import UsersEdit from '../features/users/UsersEdit';
+
+// Departments Routes
 import DepartmentsIndex from '../features/departments/DepartmentsIndex';
+import DepartmentsAdd from '../features/departments/DepartmentsAdd';
 
 const AppRoutes = () => {
     return (
@@ -18,7 +23,7 @@ const AppRoutes = () => {
                     <Route path="/users/edit/:id" element={<UsersEdit />}/>
 
                     <Route path="/departments" element={<DepartmentsIndex />}/>
-                    <Route path="/departments/add" element={<UsersAdd />}/>
+                    <Route path="/departments/add" element={<DepartmentsAdd />}/>
                 </Route>
             </Route>
 

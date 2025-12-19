@@ -18,7 +18,6 @@ const DepartmentsAdd = () => {
     const { errors, notification } = useAppSelector((state) => state.departments)
 
     useEffect(() => {
-        console.log(errors)
         dispatch(clearNotif());
     }, [])
 

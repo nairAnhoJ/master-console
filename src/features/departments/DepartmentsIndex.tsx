@@ -31,7 +31,7 @@ const DepartmentsIndex = () => {
       
     useEffect(()=>{
         if(notification){
-            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'users'}));
+            dispatch(addNotif({type: notification.type, msg: notification.msg, feature: 'departments'}));
             dispatch(clearNotification());
             dispatch(fetchDepartments(search));
             handleCloseConfirmationModal();
@@ -111,8 +111,8 @@ const DepartmentsIndex = () => {
 
     return (
         <>  
-            { (feature === 'users') &&
-                <Notification />
+            { (feature === 'departments') &&
+                <Notification /> 
             }
 
             { showResetModal &&
@@ -132,7 +132,7 @@ const DepartmentsIndex = () => {
                 {/* Controller */}
                 <div className="w-full h-10 mt-6 flex justify-between">
                     <div className="w-44">
-                        <Link to={'/users/add'} className="block p-2 font-bold text-white bg-blue-700 over:bg-blue-800 rounded cursor-pointer shadow text-center">New Department</Link>
+                        <Link to={'/departments/add'} className="block p-2 font-bold text-white bg-blue-700 over:bg-blue-800 rounded cursor-pointer shadow text-center">New Department</Link>
                     </div>
                     <div className="h-full relative flex items-center gap-x-3 ">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 absolute left-2 shadow shadow-[#181818] p-1 rounded" viewBox="0 -960 960 960" fill="currentColor">

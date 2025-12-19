@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../config/config";
 
+export interface Department {
+    name: string
+}
+
 export interface DepartmentList {
     id: number;
     name: string;
@@ -39,6 +43,19 @@ export const fetchDepartments = createAsyncThunk('departments/fetch', async(sear
     }
 })
 
+export const createDepartment = createAsyncThunk<any, Department, { rejectValue: any }>('department/create', async(department, {rejectWithValue}) => {
+    try {
+        const data = {
+            name: department.name
+        }
+        const res = await config.post('/departments/store', data);
+        return res.data;
+    } catch (error: any) {
+        console.log(error.response.data);
+        return rejectWithValue(error.response.data);
+    }
+})
+
 const departmentSlice = createSlice({
     name: 'department',
     initialState,
@@ -49,12 +66,30 @@ const departmentSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // Fetch
             .addCase(fetchDepartments.pending, (state) => {
                 state.loading = true;
             })
             .addCase(fetchDepartments.fulfilled, (state, action) => {
                 state.loading = false;
                 state.departments = action.payload
+            })
+
+            
+            // Create
+            .addCase(createDepartment.pending, (state) => {
+                state.errors = [];
+                state.loading = true;
+            })
+            .addCase(createDepartment.fulfilled, (state) => {
+                state.loading = false;
+                state.notification = {
+                    type: "success", 
+                    msg: "Department has been successfully created."
+                }
+            })
+            .addCase(createDepartment.rejected, (state, action) => {
+                state.errors = action.payload ? action.payload : [];
             })
     }
 })
