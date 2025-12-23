@@ -23,12 +23,14 @@ interface Errors {
 interface DepartmentState {
     loading: boolean;
     departments: DepartmentList[],
+    selectedDepartment: DepartmentList | null,
     notification: Notification | null,
     errors: Errors[],
 }
 
 const initialState: DepartmentState = {
     departments: [],
+    selectedDepartment: null,
     loading: false,
     notification: null,
     errors: [],
@@ -37,6 +39,15 @@ const initialState: DepartmentState = {
 export const fetchDepartments = createAsyncThunk('departments/fetch', async(search: string = "") => {
     try {
         const res = await config.get(`/departments?search=${search}`);
+        return res.data;
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+export const fetchDepartmentById = createAsyncThunk('departments/fetch', async(id: number) => {
+    try {
+        const res = await config.get(`/departments/${id}`);
         return res.data;
     } catch (error) {
         console.log(error)
