@@ -8,7 +8,7 @@ interface Item {
     name: string;
 }
 
-const DepartmentsAdd = () => {
+const DepartmentsEdit = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
@@ -45,7 +45,7 @@ const DepartmentsAdd = () => {
                                 <path d="M460-160v-564.69l-84.77 84.54-27.54-27.54L480-800l132.31 132.31-27.54 27.54L500-724.69V-160h-40Z"/>
                             </svg>
                         </Link>
-                        <h1 className="text-xl font-bold">Add New Department</h1>
+                        <h1 className="text-xl font-bold">Edit Department</h1>
                     </div>
 
                     <div className="mt-6 w-3xl">
@@ -66,4 +66,4 @@ const DepartmentsAdd = () => {
     )
 }
 
-export default DepartmentsAdd;
+export default DepartmentsEdit;

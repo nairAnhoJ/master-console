@@ -62,6 +62,9 @@ const departmentSlice = createSlice({
     reducers: {
         clearNotification: (state) => {
             state.notification = null;
+        },
+        clearErrors: (state) => {
+            state.errors = []
         }
     },
     extraReducers: (builder) => {
@@ -94,5 +97,5 @@ const departmentSlice = createSlice({
     }
 })
 
-export const { clearNotification } = departmentSlice.actions;
+export const { clearNotification, clearErrors } = departmentSlice.actions;
 export default departmentSlice.reducer;

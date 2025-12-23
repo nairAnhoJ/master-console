@@ -231,6 +231,9 @@ const userSlice = createSlice({
     reducers: {
         clearNotification: (state) => {
             state.notification = null;
+        },
+        clearErrors: (state) => {
+            state.errors = []
         }
     },
     extraReducers: (builder) => {
@@ -357,5 +360,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { clearNotification } = userSlice.actions;
+export const { clearNotification, clearErrors } = userSlice.actions;
 export default userSlice.reducer;

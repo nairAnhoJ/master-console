@@ -11,6 +11,7 @@ import UsersEdit from '../features/users/UsersEdit';
 // Departments Routes
 import DepartmentsIndex from '../features/departments/DepartmentsIndex';
 import DepartmentsAdd from '../features/departments/DepartmentsAdd';
+import DepartmentsEdit from '../features/departments/DepartmentsEdit';
 
 const AppRoutes = () => {
     return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
 
                     <Route path="/departments" element={<DepartmentsIndex />}/>
                     <Route path="/departments/add" element={<DepartmentsAdd />}/>
+                    <Route path="/departments/edit/:id" element={<DepartmentsEdit />}/>
                 </Route>
             </Route>
 

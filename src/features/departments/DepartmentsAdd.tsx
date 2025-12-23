@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, createDepartment } from "./departmentSlice";
+import { clearErrors, clearNotification, createDepartment } from "./departmentSlice";
 import { addNotif, clearNotif } from "../notification/notificationSlice";
 
 interface Item {
@@ -18,8 +18,9 @@ const DepartmentsAdd = () => {
     const { errors, notification } = useAppSelector((state) => state.departments)
 
     useEffect(() => {
-        console.log(errors)
+        dispatch(clearNotification());
         dispatch(clearNotif());
+        dispatch(clearErrors());
     }, [])
 
     useEffect(()=>{

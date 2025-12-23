@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, createUser } from "./userSlice";
+import { clearErrors, clearNotification, createUser } from "./userSlice";
 import { fetchDepartments } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
@@ -49,6 +49,7 @@ const UsersAdd = () => {
         dispatch(fetchSites());
         dispatch(fetchArea());
         dispatch(clearNotif());
+        dispatch(clearErrors());
     }, [])
 
     useEffect(()=>{

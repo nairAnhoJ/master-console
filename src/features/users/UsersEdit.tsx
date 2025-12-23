@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, fetchUserById, updateUser } from "./userSlice";
+import { clearErrors, clearNotification, fetchUserById, updateUser } from "./userSlice";
 import { fetchDepartments } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
 import { fetchArea } from "../areas/areaSlice";
@@ -45,6 +45,7 @@ const UsersEdit = () => {
         dispatch(fetchSites());
         dispatch(fetchArea());
         dispatch(clearNotif());
+        dispatch(clearErrors());
     }, [])
 
     useEffect(() => {
