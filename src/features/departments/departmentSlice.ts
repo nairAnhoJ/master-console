@@ -80,6 +80,16 @@ export const updateDepartment = createAsyncThunk<any, DepartmentList, { rejectVa
     }
 })
 
+export const deleteDepartment = createAsyncThunk<any, number, {rejectValue: any}>('department/delete', async(id, {rejectWithValue}) => {
+    try {
+        const res = await config.patch(`/departments/delete/${id}`);
+        return res.data;
+    } catch (error: any) {
+        console.log(error.response.data);
+        return rejectWithValue(error.response.data);
+    }
+})
+
 const departmentSlice = createSlice({
     name: 'department',
     initialState,
@@ -144,6 +154,23 @@ const departmentSlice = createSlice({
             }
         })
         .addCase(updateDepartment.rejected, (state, action) => {
+            state.errors = action.payload ? action.payload : [];
+        })
+
+        
+        // Update
+        .addCase(deleteDepartment.pending, (state) => {
+            state.errors = [];
+            state.loading = true;
+        })
+        .addCase(deleteDepartment.fulfilled, (state) => {
+            state.loading = false;
+            state.notification = {
+                type: "success", 
+                msg: "Department has been successfully deleted."
+            }
+        })
+        .addCase(deleteDepartment.rejected, (state, action) => {
             state.errors = action.payload ? action.payload : [];
         })
     }

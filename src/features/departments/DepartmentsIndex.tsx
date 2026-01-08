@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useEffect, useState } from "react";
 import { fetchDepartments, 
         clearNotification,
+        deleteDepartment,
     // resetUser,  deactivateUser, reactivateUser, deleteUser 
 } from "./departmentSlice";
 import TableLoading from "../../Components/TableLoading";
@@ -21,9 +22,8 @@ const DepartmentsIndex = () => {
         confirmButtonName: ''
     })
 
-    const { departments, loading } = useAppSelector((state) => state.departments);
+    const { departments, loading, notification } = useAppSelector((state) => state.departments);
     const { feature } = useAppSelector((state) => state.notification);
-    const { notification } = useAppSelector((state) => state.users)
 
     useEffect(() => {
         dispatch(fetchDepartments(search));
@@ -65,46 +65,16 @@ const DepartmentsIndex = () => {
         // }else if(confirmationDetails.title === 'Reactivate Account'){
         //     dispatch(reactivateUser(selectedId))
         // }else if(confirmationDetails.title === 'Delete Account'){
-        //     dispatch(deleteUser(selectedId))
+            dispatch(deleteDepartment(selectedId))
         // }
     }
-
-    // const handleResetButton = (id: number) => {
-    //     setShowResetModal(true)
-    //     setSelectedId(id);
-    //     setConfirmationDetails({
-    //         title: 'Reset Password',
-    //         body: 'Are you sure you want to reset the password of this user?',
-    //         confirmButtonName: 'Yes'
-    //     })
-    // }
-
-    // const handleDeactivateButton = (id: number) => {
-    //     setShowResetModal(true)
-    //     setSelectedId(id);
-    //     setConfirmationDetails({
-    //         title: 'Deactivate Account',
-    //         body: 'Are you sure you want to deactivate this account?',
-    //         confirmButtonName: 'Yes'
-    //     })
-    // }
-
-    // const handleReactivateButton = (id: number) => {
-    //     setShowResetModal(true) 
-    //     setSelectedId(id);
-    //     setConfirmationDetails({
-    //         title: 'Reactivate Account',
-    //         body: 'Are you sure you want to reactivate this account?',
-    //         confirmButtonName: 'Yes'
-    //     })
-    // }
 
     const handleDeleteButton = (id: number) => {
         setShowResetModal(true)
         setSelectedId(id);
         setConfirmationDetails({
-            title: 'Delete Account',
-            body: 'Are you sure you want to delete this account?',
+            title: 'Delete Department',
+            body: 'Are you sure you want to delete this department?',
             confirmButtonName: 'Yes'
         })
     }

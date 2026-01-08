@@ -18,9 +18,8 @@ const UsersIndex = () => {
         confirmButtonName: ''
     })
 
-    const { users, loading } = useAppSelector((state) => state.users);
+    const { users, loading, notification } = useAppSelector((state) => state.users);
     const { feature } = useAppSelector((state) => state.notification);
-    const { notification } = useAppSelector((state) => state.users)
 
     useEffect(() => {
         dispatch(fetchUsers(search));
