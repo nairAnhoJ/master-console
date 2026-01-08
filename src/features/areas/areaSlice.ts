@@ -16,7 +16,7 @@ const initialState: InitialState = {
     loading: false
 }
 
-export const fetchArea = createAsyncThunk('areas/fetch', async () => {
+export const fetchAreas = createAsyncThunk('areas/fetch', async () => {
     try {
         const res = await config.get('/areas');
         return res.data;
@@ -31,7 +31,7 @@ const areaSlice = createSlice({
     reducers: {},
     extraReducers: (builder => {
         builder
-            .addCase(fetchArea.fulfilled, (state, action) => {
+            .addCase(fetchAreas.fulfilled, (state, action) => {
                 state.areas = action.payload;
             })
     })

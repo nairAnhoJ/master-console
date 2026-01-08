@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { clearErrors, clearNotification, createUser } from "./userSlice";
 import { fetchDepartments } from "../departments/departmentSlice";
 import { fetchSites } from "../sites/siteSlice";
-import { fetchArea } from "../areas/areaSlice";
+import { fetchAreas } from "../areas/areaSlice";
 import { addNotif, clearNotif } from "../notification/notificationSlice";
 
 interface User {
@@ -47,7 +47,7 @@ const UsersAdd = () => {
     useEffect(() => {
         dispatch(fetchDepartments(''));
         dispatch(fetchSites());
-        dispatch(fetchArea());
+        dispatch(fetchAreas());
         dispatch(clearNotif());
         dispatch(clearErrors());
     }, [])
