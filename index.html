@@ -1,11 +1,38 @@
 <!doctype html>
 <html lang="en">
   <head>
+    
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/src/style.css" rel="stylesheet">
     <title>master-console</title>
+
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+      
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 2px grey; 
+            border-radius: 10px;
+        }
+        
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #4B5563; 
+            border-radius: 10px;
+        }
+      
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgb(95, 95, 110); 
+        }
+    </style>
+
   </head>
   <body>
     <div id="root"></div>
