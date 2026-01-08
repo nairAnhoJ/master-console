@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { clearNotification, createDepartment } from "./departmentSlice";
+import { clearErrors, clearNotification, fetchDepartmentById, updateDepartment } from "./departmentSlice";
 import { addNotif, clearNotif } from "../notification/notificationSlice";
 
 interface Item {
+    id: number;
     name: string;
 }
 
 const DepartmentsEdit = () => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [item, setItem] = useState<Item>({
+        id: 0,
         name: ''
     })
+    const { id } = useParams();
+    const {selectedDepartment} = useAppSelector((state) => state.departments)
     const { errors, notification } = useAppSelector((state) => state.departments)
 
     useEffect(() => {
+        dispatch(fetchDepartmentById(Number(id)));
         dispatch(clearNotif());
+        dispatch(clearErrors());
     }, [])
+
+    useEffect(() => {
+        setItem({...item, id: selectedDepartment.id, name: selectedDepartment.name})
+    }, [selectedDepartment])
 
     useEffect(()=>{
         if(notification){
@@ -30,7 +40,7 @@ const DepartmentsEdit = () => {
     },[notification])
 
     const handleSubmit = () => {
-        dispatch(createDepartment(item));
+        dispatch(updateDepartment(item));
     }
 
     return (

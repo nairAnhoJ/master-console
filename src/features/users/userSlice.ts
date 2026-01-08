@@ -165,7 +165,6 @@ export const updateUser = createAsyncThunk<any, SelectedUser, { rejectValue: Err
         if(user.signature){
             data.append('signature', user.signature)
         }
-        console.log(data);
 
         const response = await config.put(`/users/update/${user.id}`, data, {
             headers: { "Content-Type": "multipart/form-data" },

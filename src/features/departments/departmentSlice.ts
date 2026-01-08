@@ -23,14 +23,14 @@ interface Errors {
 interface DepartmentState {
     loading: boolean;
     departments: DepartmentList[],
-    selectedDepartment: DepartmentList | null,
+    selectedDepartment: DepartmentList,
     notification: Notification | null,
-    errors: Errors[],
+    errors: Errors[], 
 }
 
 const initialState: DepartmentState = {
     departments: [],
-    selectedDepartment: null,
+    selectedDepartment: { id: 0, name: ''},
     loading: false,
     notification: null,
     errors: [],
@@ -45,7 +45,7 @@ export const fetchDepartments = createAsyncThunk('departments/fetch', async(sear
     }
 })
 
-export const fetchDepartmentById = createAsyncThunk('departments/fetch', async(id: number) => {
+export const fetchDepartmentById = createAsyncThunk('departments/fetchById', async(id: number) => {
     try {
         const res = await config.get(`/departments/${id}`);
         return res.data;
@@ -67,6 +67,19 @@ export const createDepartment = createAsyncThunk<any, Department, { rejectValue:
     }
 })
 
+export const updateDepartment = createAsyncThunk<any, DepartmentList, { rejectValue: any }>('department/update', async(department, {rejectWithValue}) => {
+    try {
+        const data = {
+            name: department.name
+        }
+        const res = await config.put(`/departments/update/${department.id}`, data);
+        return res.data;
+    } catch (error: any) {
+        console.log(error.response.data);
+        return rejectWithValue(error.response.data);
+    }
+})
+
 const departmentSlice = createSlice({
     name: 'department',
     initialState,
@@ -80,33 +93,70 @@ const departmentSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Fetch
-            .addCase(fetchDepartments.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchDepartments.fulfilled, (state, action) => {
-                state.loading = false;
-                state.departments = action.payload
-            })
 
-            
-            // Create
-            .addCase(createDepartment.pending, (state) => {
-                state.errors = [];
-                state.loading = true;
-            })
-            .addCase(createDepartment.fulfilled, (state) => {
-                state.loading = false;
-                state.notification = {
-                    type: "success", 
-                    msg: "Department has been successfully created."
-                }
-            })
-            .addCase(createDepartment.rejected, (state, action) => {
-                state.errors = action.payload ? action.payload : [];
-            })
+        // Fetch
+        .addCase(fetchDepartments.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(fetchDepartments.fulfilled, (state, action) => {
+            state.loading = false;
+            state.departments = action.payload
+        })
+
+        // Fetch by id
+        .addCase(fetchDepartmentById.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(fetchDepartmentById.fulfilled, (state, action) => {
+            state.loading = false;
+            state.selectedDepartment.id = action.payload.id
+            state.selectedDepartment.name = action.payload.name
+        })
+
+        
+        // Create
+        .addCase(createDepartment.pending, (state) => {
+            state.errors = [];
+            state.loading = true;
+        })
+        .addCase(createDepartment.fulfilled, (state) => {
+            state.loading = false;
+            state.notification = {
+                type: "success", 
+                msg: "Department has been successfully created."
+            }
+        })
+        .addCase(createDepartment.rejected, (state, action) => {
+            state.errors = action.payload ? action.payload : [];
+        })
+
+        
+        // Update
+        .addCase(updateDepartment.pending, (state) => {
+            state.errors = [];
+            state.loading = true;
+        })
+        .addCase(updateDepartment.fulfilled, (state) => {
+            state.loading = false;
+            state.notification = {
+                type: "success", 
+                msg: "Department has been successfully updated."
+            }
+        })
+        .addCase(updateDepartment.rejected, (state, action) => {
+            state.errors = action.payload ? action.payload : [];
+        })
     }
 })
 
 export const { clearNotification, clearErrors } = departmentSlice.actions;
 export default departmentSlice.reducer;
+
+
+
+
+
+
+
+
+ 
