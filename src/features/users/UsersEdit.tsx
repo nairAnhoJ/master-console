@@ -43,7 +43,7 @@ const UsersEdit = () => {
         dispatch(fetchUserById(Number(id)))
         dispatch(fetchDepartments(''));
         dispatch(fetchSites());
-        dispatch(fetchAreas());
+        dispatch(fetchAreas(''));
         dispatch(clearNotif());
         dispatch(clearErrors());
     }, [])

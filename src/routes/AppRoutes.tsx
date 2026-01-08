@@ -13,6 +13,11 @@ import DepartmentsIndex from '../features/departments/DepartmentsIndex';
 import DepartmentsAdd from '../features/departments/DepartmentsAdd';
 import DepartmentsEdit from '../features/departments/DepartmentsEdit';
 
+// Areas Routes
+import AreaIndex from '../features/areas/AreaIndex';
+import AreaAdd from '../features/areas/AreaAdd';
+import AreaEdit from '../features/areas/AreaEdit';
+
 const AppRoutes = () => {
     return (
         <Routes>
@@ -26,6 +31,10 @@ const AppRoutes = () => {
                     <Route path="/departments" element={<DepartmentsIndex />}/>
                     <Route path="/departments/add" element={<DepartmentsAdd />}/>
                     <Route path="/departments/edit/:id" element={<DepartmentsEdit />}/>
+
+                    <Route path="/areas" element={<AreaIndex />}/>
+                    <Route path="/areas/add" element={<AreaAdd />}/>
+                    <Route path="/areas/edit/:id" element={<AreaEdit />}/>
                 </Route>
             </Route>
 

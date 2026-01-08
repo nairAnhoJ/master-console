@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import reducer from "../auth/authSlice";
 
 interface Notification {
-    feature: 'users' | 'departments' | null;
+    feature: 'users' | 'departments' | 'areas' | null;
     type: "success" | "error" | "warning" | null;
     msg: string | null;
 }

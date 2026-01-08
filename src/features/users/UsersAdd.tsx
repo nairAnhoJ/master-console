@@ -47,7 +47,7 @@ const UsersAdd = () => {
     useEffect(() => {
         dispatch(fetchDepartments(''));
         dispatch(fetchSites());
-        dispatch(fetchAreas());
+        dispatch(fetchAreas(''));
         dispatch(clearNotif());
         dispatch(clearErrors());
     }, [])

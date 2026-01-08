@@ -22,10 +22,10 @@ interface Errors {
 
 interface DepartmentState {
     loading: boolean;
-    departments: DepartmentList[],
-    selectedDepartment: DepartmentList,
-    notification: Notification | null,
-    errors: Errors[], 
+    departments: DepartmentList[];
+    selectedDepartment: DepartmentList;
+    notification: Notification | null;
+    errors: Errors[];
 }
 
 const initialState: DepartmentState = {
@@ -78,7 +78,7 @@ export const updateDepartment = createAsyncThunk<any, DepartmentList, { rejectVa
         console.log(error.response.data);
         return rejectWithValue(error.response.data);
     }
-})
+}) 
 
 export const deleteDepartment = createAsyncThunk<any, number, {rejectValue: any}>('department/delete', async(id, {rejectWithValue}) => {
     try {
