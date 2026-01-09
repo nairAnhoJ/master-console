@@ -17,6 +17,9 @@ import DepartmentsEdit from '../features/departments/DepartmentsEdit';
 import AreaIndex from '../features/areas/AreaIndex';
 import AreaAdd from '../features/areas/AreaAdd';
 import AreaEdit from '../features/areas/AreaEdit';
+import SiteIndex from '../features/sites/SiteIndex';
+import SiteAdd from '../features/sites/SiteAdd';
+import SiteEdit from '../features/sites/SiteEdit';
 
 const AppRoutes = () => {
     return (
@@ -35,6 +38,10 @@ const AppRoutes = () => {
                     <Route path="/areas" element={<AreaIndex />}/>
                     <Route path="/areas/add" element={<AreaAdd />}/>
                     <Route path="/areas/edit/:id" element={<AreaEdit />}/>
+
+                    <Route path="/sites" element={<SiteIndex />}/>
+                    <Route path="/sites/add" element={<SiteAdd />}/>
+                    <Route path="/sites/edit/:id" element={<SiteEdit />}/>
                 </Route>
             </Route>
 
