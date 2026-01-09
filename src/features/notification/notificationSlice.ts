@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import reducer from "../auth/authSlice";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface Notification {
     feature: 'users' | 'departments' | 'areas' | 'sites' | null;
