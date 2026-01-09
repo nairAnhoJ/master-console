@@ -37,12 +37,12 @@ const Navigation = () => {
                             </svg>
                             Areas
                         </Link>
-                        <button className="w-full py-3 px-3 flex gap-x-3 items-center text-white text-sm rounded-lg hover:bg-[#282828] cursor-pointer">
+                        <Link to={'/sites'} className="w-full py-3 px-3 flex gap-x-3 items-center text-white text-sm rounded-lg hover:bg-[#282828] cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-7" fill="currentColor" viewBox="0 -960 960 960">
                                 <path d="M480-275q98-88 149-171t51-155q0-88-56-143.5T480-800q-88 0-144 55.5T280-601q0 72 51 155t149 171Zm0 36q-112-95-170-187.5T252-601q0-100 64-163.5T480-828q100 0 164 63.5T708-601q0 82-58 174T480-239Zm0-301q25 0 42.5-17.5T540-600q0-25-17.5-42.5T480-660q-25 0-42.5 17.5T420-600q0 25 17.5 42.5T480-540ZM252-132v-28h456v28H252Zm228-468Z"/>
                             </svg>
                             Sites
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Footer | Log Out */}
