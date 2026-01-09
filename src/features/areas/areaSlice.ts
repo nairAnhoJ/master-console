@@ -166,7 +166,7 @@ const areaSlice = createSlice({
                 state.loading = false;
                 state.notification = {
                     type: "success", 
-                    msg: "Department has been successfully deleted."
+                    msg: "Area has been successfully deleted."
                 }
             })
             .addCase(deleteArea.rejected, (state, action) => {
