@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import axios from "axios";
 import config from '../../config/config'
 
 const storedToken = localStorage.getItem("token");
@@ -64,7 +63,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        logout(state){
+        logout(){
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             window.location.href = "/login";

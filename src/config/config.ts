@@ -8,7 +8,6 @@ const config = axios.create({
 
 config.interceptors.request.use((cnfg) => {
     const token = localStorage.getItem("token");
-    // cnfg.headers["Content-Type"] = 'application/json';
     if(token){
         cnfg.headers.Authorization = `Bearer ${token}`;
     }
