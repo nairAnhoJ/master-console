@@ -42,7 +42,7 @@ const UsersEdit = () => {
     useEffect(() => {
         dispatch(fetchUserById(Number(id)))
         dispatch(fetchDepartments(''));
-        dispatch(fetchSites());
+        dispatch(fetchSites(''));
         dispatch(fetchAreas(''));
         dispatch(clearNotif());
         dispatch(clearErrors());
