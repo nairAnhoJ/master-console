@@ -6,13 +6,11 @@ import React from 'react';
 
 const AreasRoutes = () => {
     return (
-        <>
-            <React.Fragment>
-                <Route path="/areas" element={<AreaIndex />}/>
-                <Route path="/areas/add" element={<AreaAdd />}/>
-                <Route path="/areas/edit/:id" element={<AreaEdit />}/>
-            </React.Fragment>
-        </>
+        <React.Fragment>
+            <Route path="/areas" element={<AreaIndex />}/>
+            <Route path="/areas/add" element={<AreaAdd />}/>
+            <Route path="/areas/edit/:id" element={<AreaEdit />}/>
+        </React.Fragment>
     )
 }
 

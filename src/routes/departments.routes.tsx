@@ -6,13 +6,11 @@ import React from 'react';
 
 const DepartmentsRoutes = () => {
     return (
-        <>
-            <React.Fragment>
-                <Route path="/departments" element={<DepartmentsIndex />}/>
-                <Route path="/departments/add" element={<DepartmentsAdd />}/>
-                <Route path="/departments/edit/:id" element={<DepartmentsEdit />}/>
-            </React.Fragment>
-        </>
+        <React.Fragment>
+            <Route path="/departments" element={<DepartmentsIndex />}/>
+            <Route path="/departments/add" element={<DepartmentsAdd />}/>
+            <Route path="/departments/edit/:id" element={<DepartmentsEdit />}/>
+        </React.Fragment>
     )
 }
 
