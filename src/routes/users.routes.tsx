@@ -2,17 +2,17 @@ import UsersIndex from '../features/users/UsersIndex';
 import UsersAdd from '../features/users/UsersAdd';
 import UsersEdit from '../features/users/UsersEdit';
 import { Route } from 'react-router-dom';
-import { Fragment } from 'react/jsx-runtime';
+import React from 'react';
 
 const UsersRoutes = () => {
     return (
         <>
-            <Fragment>
+            <React.Fragment>
                 <Route path="/" element={<UsersIndex />}/>
                 <Route path="/users" element={<UsersIndex />}/>
                 <Route path="/users/add" element={<UsersAdd />}/>
                 <Route path="/users/edit/:id" element={<UsersEdit />}/>
-            </Fragment>
+            </React.Fragment>
         </>
     )
 }
