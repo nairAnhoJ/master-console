@@ -1,9 +1,12 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.BASE_URL;
+
 const config = axios.create({
     // baseURL: "",
-    baseURL: 'http://localhost:5050/api',
+    // baseURL: 'http://localhost:5050/api',
     // baseURL: "http://192.168.20.143:5050",
+    baseURL: baseURL,
 });
 
 config.interceptors.request.use((cnfg) => {
