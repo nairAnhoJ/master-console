@@ -14,7 +14,7 @@ const Navigation = () => {
 
                     {/* Header | Logo */}
                     <div className="p-6">
-                        <img src="/public/logo.ico" className="w-10 h-10" alt="logo" />
+                        <img src="/logo.ico" className="w-10 h-10" alt="logo" />
                     </div>
 
                     {/* Body | Menus */}

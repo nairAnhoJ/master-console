@@ -40,7 +40,7 @@ const LoginPage = () => {
             <div className='w-screen h-screen bg-[#181818] flex items-center justify-center'>
                 <div className=' bg-[#212121] px-20 pb-14 pt-10 rounded-lg w-[416px] shadow-lg'>
                     <div>
-                        <img src="/public/logo.ico" className='mx-auto w-16' alt="logo" />
+                        <img src="/logo.ico" className='mx-auto w-16' alt="logo" />
                         <h1 className='text-center font-bold text-[#eeeeee] text-3xl'>Sign-In</h1>
                     </div>
                     {
