@@ -2,7 +2,6 @@ import AreaIndex from '../features/areas/AreaIndex';
 import AreaAdd from '../features/areas/AreaAdd';
 import AreaEdit from '../features/areas/AreaEdit';
 import { Route } from 'react-router-dom';
-import { Fragment } from 'react';
 
 export const AreasRoutes = () => (
     <>
