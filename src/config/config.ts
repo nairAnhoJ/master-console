@@ -1,9 +1,6 @@
 import axios from "axios";
 
 const config = axios.create({
-    // baseURL: "",
-    // baseURL: 'http://localhost:5050/api',
-    // baseURL: "http://192.168.20.143:5050",
     baseURL: `${import.meta.env.VITE_BASE_URL}/api`,
 });
 
