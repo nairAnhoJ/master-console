@@ -42,7 +42,7 @@ const UsersAdd = () => {
     const { errors, notification } = useAppSelector((state) => state.users)
     const [fileError, setFileError] = useState<string>('')
     const [signPrev,setSignPrev] = useState<string | null>(null);
-    const allowedAppsOptions = ['mrf', 'master-console'];
+    const allowedAppsOptions = ['master-console'];
 
     useEffect(() => {
         dispatch(fetchDepartments(''));
