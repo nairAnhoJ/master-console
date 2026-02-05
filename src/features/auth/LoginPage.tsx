@@ -27,6 +27,12 @@ const LoginPage = () => {
         password: ""
     })
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key==="Enter"){
+            handleSubmit();
+        }
+    }
+
     const handleChangeData = (e: ChangeEvent<HTMLInputElement>) => {
         setData({...data, [e.target.name]: e.target.value})
     }
@@ -57,7 +63,7 @@ const LoginPage = () => {
                             <input name='id_number' value={data.id_number} onChange={(e) => handleChangeData(e)} type="text" className='flex-1 focus:outline-none'/>
                         </div>
                         <p className='text-xs text-[#eeeeee] mt-6'>Password</p>
-                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#eeeeee] border-b  px-1 w-full focus:outline-none`}/>
+                        <input name='password' value={data.password} onChange={(e) => handleChangeData(e)} onKeyDown={handleKeyDown} type="password" className={`${errors?.find((err) => err.path === 'password') ? 'border-red-500' : 'border-gray-400' } text-[#eeeeee] border-b  px-1 w-full focus:outline-none`}/>
                         <button disabled={loading} onClick={handleSubmit} type='button' className='w-full text-sm p-3 text-white font-bold mt-10 rounded cursor-pointer bg-[#363636] hover:bg-[#313131] relative'>
                             SIGN-IN
                             { loading && 
